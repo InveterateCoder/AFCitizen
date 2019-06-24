@@ -27,17 +27,30 @@ namespace AFCitizen.Pages.Account
                 IdentityUser user = await userManager.FindByEmailAsync(Form.Email);
                 if (user != null)
                 {
-                    await signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result =
-                        await signInManager.PasswordSignInAsync(user, Form.Password, false, false);
-                    if (result.Succeeded)
-                        return Redirect(returnUrl ?? "/");
+                    if (await userManager.IsInRoleAsync(user, "Пользователь"))
+                    {
+                        await signInManager.SignOutAsync();
+                        Microsoft.AspNetCore.Identity.SignInResult result =
+                            await signInManager.PasswordSignInAsync(user, Form.Password, false, false);
+                        if (result.Succeeded)
+                            return Redirect(returnUrl ?? "/");
+                        else
+                            ModelState.AddModelError("", "Что то пошло не так, свяжитесь с администратором");
+                            
+                    }
+                    else
+                        ModelState.AddModelError("", "Данный пользователь не относится к роли \"Пользователь\"");
                 }
-                ModelState.AddModelError(nameof(Models.Account.LoginMod.Email),
-                    "Неправильны пользователь или пароль");
+                else
+                    ModelState.AddModelError(nameof(Models.Account.LoginMod.Email), "Неправильны пользователь или пароль");
             }
             ViewData["returnUrl"] = returnUrl;
             return Page();
+        }
+        private void AddErrorsFromResult(IdentityResult result)
+        {
+            foreach (IdentityError error in result.Errors)
+                ModelState.AddModelError("", error.Description);
         }
     }
 }
