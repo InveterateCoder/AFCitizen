@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AFCitizen.Models
+namespace AFCitizen.Models.Account
 {
-    public class LoginMod
+    public class RegisterMod
     {
         [Required]
-        [UIHint("email")]
+        public string User { get; set; }
+        [Required]
         public string Email { get; set; }
         [Required]
-        [UIHint("password")]
         public string Password { get; set; }
     }
 }

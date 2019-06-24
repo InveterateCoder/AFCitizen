@@ -15,7 +15,7 @@ namespace AFCitizen.Pages.Account
             signInManager = signinMgr;
         }
         [BindProperty]
-        public Models.LoginMod Form { get; set; } = new Models.LoginMod();
+        public Models.Account.LoginMod Form { get; set; } = new Models.Account.LoginMod();
         public void OnGet(string returnUrl)
         {
             ViewData["returnUrl"] = returnUrl;
@@ -33,7 +33,7 @@ namespace AFCitizen.Pages.Account
                     if (result.Succeeded)
                         return Redirect(returnUrl ?? "/");
                 }
-                ModelState.AddModelError(nameof(Models.LoginMod.Email),
+                ModelState.AddModelError(nameof(Models.Account.LoginMod.Email),
                     "Ќеправильны пользователь или пароль");
             }
             ViewData["returnUrl"] = returnUrl;
