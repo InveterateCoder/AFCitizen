@@ -8,7 +8,7 @@
             <img class="card-img-top" src="~/assets/rf.webp" alt="Флаг и Герб РФ" />
             <div class="card-body">
                 <h1 class="card-title text-center">Авторизация</h1>
-                <form>
+                <form asp-page="Authorize" method="post">
                     <div class="form-group">
                         <label asp-for="Email">Эл. почта:</label>
                         <input asp-for="Email" class="form-control" />
@@ -21,4 +21,5 @@
                 </form>
             </div>
         </div>
+        <div class="text-danger" asp-validation-summary="All"></div>
     </div>
