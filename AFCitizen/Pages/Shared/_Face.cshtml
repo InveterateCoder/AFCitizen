@@ -2,7 +2,7 @@
     Layout = "_Layout";
 }
     <div class="jumbotron text-center">
-        <div class="display-1">Название</div>
+        <div class="display-1">Гражданин <span class="badge badge-secondary">РФ</span></div>
     </div>
     <div class="container">
         <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
@@ -13,26 +13,26 @@
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Главная</a>
+                        <a class="nav-link" href="~/">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Кнопка1</a>
+                        <a class="nav-link" href="#">Написать</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Кнопка2</a>
+                        <a class="nav-link" href="#">Архив</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Кнопка3</a>
+                        <a class="nav-link" href="#">Поиск Льгот</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    @if (ViewBag.Authorized)
+                    @if ((bool)TempData["IsAuthenticated"])
                     {
                         <li class="navbar-text text-info mr-md-4 m-auto">
-                            @ViewBag.Name
+                            @TempData["AuthenticatedName"]
                         </li>
                         <li class="nav-item ml-auto">
-                            <a class="nav-link" href="#">Выйти</a>
+                            <a class="nav-link" asp-page-handler="SignOut">Выйти</a>
                         </li>
                     }
                     else
@@ -41,7 +41,7 @@
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Авторизация</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Регистрация</a>
-                                <a class="dropdown-item" href="#">Войти</a>
+                                <a class="dropdown-item" href="/Account/Login">Войти</a>
                             </div>
                         </li>
                     }
