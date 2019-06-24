@@ -1,0 +1,53 @@
+﻿@page
+@model AFCitizen.Pages.Admin.Roles.EditModel
+@{
+    Layout = "_Layout";
+}
+    <div class="container">
+        <div class="bg-dark text-white p-1 text-center"><h3>Править Роль</h3></div>
+        <div class="text-danger" asp-validation-summary="All"></div>
+        <form asp-page="Edit" method="post">
+            <input type="hidden" name="roleName" value="@Model.RoleEditModel.Role.Name" />
+            <input type="hidden" name="roleId" value="@Model.RoleEditModel.Role.Id" />
+            <h6 class="bg-info p-1 text-white">Назначить к @Model.RoleEditModel.Role.Name</h6>
+            <table class="table table-bordered table-sm">
+                @if (Model.RoleEditModel.NonMembers.Count() == 0)
+                {
+                    <tr><td colspan="2">Все пользователи назначены</td></tr>
+                }
+                else
+                {
+                    foreach (Microsoft.AspNetCore.Identity.IdentityUser user in Model.RoleEditModel.NonMembers)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>
+                                <input type="checkbox" name="IdsToAdd" value="@user.Id" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <h6 class="bg-info p-1 text-white">Исключить из @Model.RoleEditModel.Role.Name</h6>
+            <table class="table table-bordered table-sm">
+                @if (Model.RoleEditModel.Members.Count() == 0)
+                {
+                    <tr><td colspan="2">Пользователи не назначены</td></tr>
+                }
+                else
+                {
+                    @foreach (Microsoft.AspNetCore.Identity.IdentityUser user in Model.RoleEditModel.Members)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>
+                                <input type="checkbox" name="IdsToDelete" value="@user.Id" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <button type="submit" class="btn btn-outline-primary btn-block">Сохранить</button>
+            <a asp-page="Index" class="btn btn-outline-secondary btn-block">Отмена</a>
+        </form>
+    </div>

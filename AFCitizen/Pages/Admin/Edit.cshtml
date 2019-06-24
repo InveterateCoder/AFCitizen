@@ -1,0 +1,26 @@
+﻿@page
+@model AFCitizen.Pages.Admin.EditModel
+@{
+    Layout = "_Layout";
+}
+    <div class="container">
+        <div class="bg-dark text-white p-1 text-center"><h3>Править пользователя</h3></div>
+        <div class="text-danger" asp-validation-summary="All"></div>
+        <form asp-page="Edit" method="post">
+            <input asp-for="Form.Id" class="form-control" hidden />
+            <div class="form-group">
+                <label asp-for="Form.User">Имя пользователя:</label>
+                <input asp-for="Form.User" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Form.Email">Эл. адрес пользователя:</label>
+                <input asp-for="Form.Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input name="password" id="password" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a asp-page="Index" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
