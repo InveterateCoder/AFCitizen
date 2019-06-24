@@ -1,0 +1,24 @@
+﻿@page
+@model AFCitizen.Pages.AuthorizeModel
+@{
+    Layout = "_Layout";
+}
+    <div class="container">
+        <div class="card m-auto border-0" style="max-width:500px">
+            <img class="card-img-top" src="~/assets/rf.webp" alt="Флаг и Герб РФ" />
+            <div class="card-body">
+                <h1 class="card-title text-center">Авторизация</h1>
+                <form>
+                    <div class="form-group">
+                        <label asp-for="Email">Эл. почта:</label>
+                        <input asp-for="Email" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password">Пароль:</label>
+                        <input asp-for="Password" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Авторизоваться</button>
+                </form>
+            </div>
+        </div>
+    </div>
