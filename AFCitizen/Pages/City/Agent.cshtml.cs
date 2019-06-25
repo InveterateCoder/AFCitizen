@@ -11,8 +11,10 @@ namespace AFCitizen.Pages.City
     [Authorize(Policy = "√орјг")]
     public class AgentModel : PageModel
     {
+        public string Header { get; set; }
         public void OnGet()
         {
+            Header = User.Identity.Name;
         }
     }
 }

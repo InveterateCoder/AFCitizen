@@ -41,12 +41,7 @@
                     <div class="input-group-prepend">
                         <span style="width:200px" class="input-group-text">Возраст (полных лет):</span>
                     </div>
-                    <select name="age" class="custom-select">
-                        @for (var i = 18; i <= 130; i++)
-                        {
-                            <option value="@i.ToString()">@i.ToString()</option>
-                        }
-                    </select>
+                    <input type="number" min="18" max="150" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
@@ -59,11 +54,11 @@
             </div>
             <div class="form-group">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="same" name="same" />
+                    <input type="checkbox" class="custom-control-input" id="same" name="same" data-toggle="collapse" data-target="#registration" />
                     <label class="custom-control-label" for="same">Совпадает с пропиской</label>
                 </div>
             </div>
-            <div class="form-group">
+            <div id="registration" class="form-group show">
                 <div class="input-group mb-3 input-group-sm">
                     <div class="input-group-prepend">
                         <span style="width:200px" class="input-group-text">Место прописки:</span>
