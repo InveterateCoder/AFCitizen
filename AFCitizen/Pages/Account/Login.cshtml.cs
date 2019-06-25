@@ -124,6 +124,13 @@ namespace AFCitizen.Pages.Account
                         ModelState.AddModelError("", "Исполнитель не найден");
                 }
             }
+            else
+            {
+                if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || returnUrl == "/Index")
+                    isAuthority = false;
+                else
+                    isAuthority = true;
+            }
             ViewData["returnUrl"] = returnUrl;
             return Page();
         }
