@@ -3,6 +3,73 @@
 @{
     Layout = "_Layout";
 }
+@section  head{ 
+    <style>
+        body{
+            -webkit-user-select: none;
+            -moz-user-select: -moz-none;
+            user-select: none;
+        }
+    </style>
+}
     <div class="container">
-
+        <div class="jumbotron">
+            <div class="display-4 text-info">Мои льготы</div>
+        </div>
+        <br />
+        <form asp-page="privileges" method="post">
+            <h2>О себе</h2>
+            <hr />
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="isCitizen" name="isCitizen" />
+                    <label class="custom-control-label" for="isCitizen">Гражданин Российской Федерации</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" id="isMan" name="gender" value="man">
+                    <label class="custom-control-label" for="isMan">Мужчина</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" id="isWoman" name="gender" value="woman">
+                    <label class="custom-control-label" for="isWoman">Женщина</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group mb-3 input-group-sm">
+                    <div class="input-group-prepend">
+                        <span style="width:200px" class="input-group-text">Возраст (полных лет):</span>
+                    </div>
+                    <select name="age" class="custom-select">
+                        @for (var i = 18; i <= 130; i++)
+                        {
+                            <option value="@i.ToString()">@i.ToString()</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group mb-3 input-group-sm">
+                    <div class="input-group-prepend">
+                        <span style="width:200px" class="input-group-text">Место проживания:</span>
+                    </div>
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="same" name="same" />
+                    <label class="custom-control-label" for="same">Совпадает с пропиской</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group mb-3 input-group-sm">
+                    <div class="input-group-prepend">
+                        <span style="width:200px" class="input-group-text">Место прописки:</span>
+                    </div>
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+        </form>
     </div>

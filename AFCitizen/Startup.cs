@@ -37,6 +37,24 @@ namespace AFCitizen
                     policy.RequireRole("Диспетчер");
                     policy.RequireRole("Федерация");
                 });
+                opts.AddPolicy("СубАг", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole("Субъект");
+                    policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
+                });
+                opts.AddPolicy("ГорАг", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole("Город");
+                    policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
+                });
+                opts.AddPolicy("ФедАг", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole("Федерация");
+                    policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
+                });
             });
             services.AddIdentity<IdentityUser, IdentityRole>(opts =>
             {
