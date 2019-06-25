@@ -10,12 +10,24 @@ namespace AFCitizen.Pages
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
+        public async void OnGetAsync()
         {
-            bool isAuthenticated = User.Identity.IsAuthenticated;
-            TempData["IsAuthenticated"] = isAuthenticated;
-            if (isAuthenticated)
-                TempData["AuthenticatedName"] = User.Identity.Name;
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Пользователь"))
+                {
+                    TempData["IsAuthenticated"] = true;
+                    TempData["AuthenticatedName"] = User.Identity.Name;
+                }
+                else
+                {
+                    TempData["IsAuthenticated"] = false;
+                    var signMgr = (SignInManager<IdentityUser>)HttpContext.RequestServices.GetService(typeof(SignInManager<IdentityUser>));
+                    await signMgr.SignOutAsync();
+                }
+            }
+            else
+                TempData["IsAuthenticated"] = false;
         }
         public async void OnGetSignOutAsync([FromServices]SignInManager<IdentityUser> signinMgr)
         {

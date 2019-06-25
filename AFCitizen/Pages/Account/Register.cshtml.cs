@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +17,12 @@ namespace AFCitizen.Pages.Account
             userManager = userMgr;
             signinManager = signinMgr;
         }
-        [BindProperty]
-        public Models.Account.RegisterMod Form { get; set; } = new Models.Account.RegisterMod();
+        [Required, BindProperty]
+        public string Name { get; set; }
+        [Required, BindProperty]
+        public string Email { get; set; }
+        [Required, BindProperty]
+        public string Password { get; set; }
         public void OnGet()
         {
         }
@@ -31,10 +36,10 @@ namespace AFCitizen.Pages.Account
                 {
                     IdentityUser user = new IdentityUser
                     {
-                        UserName = Form.User,
-                        Email = Form.Email
+                        UserName = Name,
+                        Email = Email
                     };
-                    IdentityResult result = await userManager.CreateAsync(user, Form.Password);
+                    IdentityResult result = await userManager.CreateAsync(user, Password);
                     if (!result.Succeeded)
                         AddErrorsFromResult(result);
                     else

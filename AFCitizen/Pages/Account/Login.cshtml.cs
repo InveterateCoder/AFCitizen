@@ -2,47 +2,127 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace AFCitizen.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private UserManager<IdentityUser> userManager;
-        private SignInManager<IdentityUser> signInManager;
-        public LoginModel(UserManager<IdentityUser> usrMgr, SignInManager<IdentityUser> signinMgr)
-        {
-            userManager = usrMgr;
-            signInManager = signinMgr;
-        }
-        [BindProperty]
-        public Models.Account.LoginMod Form { get; set; } = new Models.Account.LoginMod();
+        [Required, BindProperty]
+        public string Email { get; set; }
+        [Required, BindProperty]
+        public string Password { get; set; }
+        public bool isAuthority { get; set; }
         public void OnGet(string returnUrl)
         {
+            if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || returnUrl == "/Index")
+                isAuthority = false;
+            else
+                isAuthority = true;
             ViewData["returnUrl"] = returnUrl;
         }
-        public async Task<IActionResult> OnPostAsync(string returnUrl)
+        public async Task<IActionResult> OnPostAsync(string returnUrl, [FromServices]UserManager<IdentityUser> userMgr, [FromServices]SignInManager<IdentityUser> signinMgr)
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = await userManager.FindByEmailAsync(Form.Email);
-                if (user != null)
+                if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || returnUrl == "/Index")
                 {
-                    if (await userManager.IsInRoleAsync(user, "Пользователь"))
+                    isAuthority = false;
+                    IdentityUser user = await userMgr.FindByEmailAsync(Email);
+                    if (user != null)
                     {
-                        await signInManager.SignOutAsync();
-                        Microsoft.AspNetCore.Identity.SignInResult result =
-                            await signInManager.PasswordSignInAsync(user, Form.Password, false, false);
-                        if (result.Succeeded)
-                            return Redirect(returnUrl ?? "/");
+                        if (await userMgr.IsInRoleAsync(user, "Пользователь"))
+                        {
+                            await signinMgr.SignOutAsync();
+                            Microsoft.AspNetCore.Identity.SignInResult result =
+                                await signinMgr.PasswordSignInAsync(user, Password, false, false);
+                            if (result.Succeeded)
+                                return Redirect(returnUrl ?? "/");
+                            else
+                                ModelState.AddModelError("", "Что то пошло не так, свяжитесь с администратором");
+
+                        }
                         else
-                            ModelState.AddModelError("", "Что то пошло не так, свяжитесь с администратором");
-                            
+                            ModelState.AddModelError("", "Данный пользователь не относится к роли \"Пользователь\"");
                     }
                     else
-                        ModelState.AddModelError("", "Данный пользователь не относится к роли \"Пользователь\"");
+                        ModelState.AddModelError("", "Неправильны пользователь или пароль");
                 }
                 else
-                    ModelState.AddModelError(nameof(Models.Account.LoginMod.Email), "Неправильны пользователь или пароль");
+                {
+                    isAuthority = true;
+                    IdentityUser user = await userMgr.FindByEmailAsync(Email);
+                    if (user != null)
+                    {
+                        if (await userMgr.IsInRoleAsync(user, "Город"))
+                        {
+                            var result = await signinMgr.PasswordSignInAsync(user, Password, false, false);
+                            if (result.Succeeded)
+                            {
+                                if (await userMgr.IsInRoleAsync(user, "Диспетчер"))
+                                {
+                                    return RedirectToPage("/City/Index");
+                                }
+                                else
+                                {
+                                    return RedirectToPage("/City/Agent");
+                                }
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Не получилось авторизоваться");
+                            }
+                        }
+                        else
+                        {
+                            if (await userMgr.IsInRoleAsync(user, "Субъект"))
+                            {
+                                var result = await signinMgr.PasswordSignInAsync(user, Password, false, false);
+                                if (result.Succeeded)
+                                {
+                                    if (await userMgr.IsInRoleAsync(user, "Диспетчер"))
+                                    {
+                                        return RedirectToPage("/Subject/Index");
+                                    }
+                                    else
+                                    {
+                                        return RedirectToPage("/Subject/Agent");
+                                    }
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "Не получилось авторизоваться");
+                                }
+                            }
+                            else
+                            {
+                                if (await userMgr.IsInRoleAsync(user, "Федерация"))
+                                {
+                                    var result = await signinMgr.PasswordSignInAsync(user, Password, false, false);
+                                    if (result.Succeeded)
+                                    {
+                                        if (await userMgr.IsInRoleAsync(user, "Диспетчер"))
+                                        {
+                                            return RedirectToPage("/Federation/Index");
+                                        }
+                                        else
+                                        {
+                                            return RedirectToPage("/Federation/Agent");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ModelState.AddModelError("", "Не получилось авторизоваться");
+                                    }
+                                }
+                                else
+                                    ModelState.AddModelError("", "Исполнитель не найден");
+                            }
+                        }
+                    }
+                    else
+                        ModelState.AddModelError("", "Исполнитель не найден");
+                }
             }
             ViewData["returnUrl"] = returnUrl;
             return Page();

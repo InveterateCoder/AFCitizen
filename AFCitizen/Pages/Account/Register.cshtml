@@ -9,16 +9,16 @@
         <div class="text-danger" asp-validation-summary="All"></div>
         <form asp-page="Register" method="post">
             <div class="form-group">
-                <label asp-for="Form.User">Имя:</label>
-                <input asp-for="Form.User" class="form-control" />
+                <label asp-for="Name">Имя:</label>
+                <input asp-for="Name" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Form.Email">Эл. адрес:</label>
-                <input asp-for="Form.Email" class="form-control" />
+                <label asp-for="Email">Эл. адрес:</label>
+                <input asp-for="Email" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Form.Password">Пароль:</label>
-                <input asp-for="Form.Password" class="form-control" />
+                <label asp-for="Password">Пароль:</label>
+                <input asp-for="Password" class="form-control" />
             </div>
             <button type="submit" class="btn btn-outline-primary btn-block">Регистрировать</button>
             <a class="btn btn-outline-secondary btn-block" asp-page="/Index">Отмена</a>

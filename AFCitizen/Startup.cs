@@ -17,6 +17,27 @@ namespace AFCitizen
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<UserIdentityDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("Users")));
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("СубДисп", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole("Диспетчер");
+                    policy.RequireRole("Субъект");
+                });
+                opts.AddPolicy("ГорДисп", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole("Диспетчер");
+                    policy.RequireRole("Город");
+                });
+                opts.AddPolicy("ФедДисп", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole("Диспетчер");
+                    policy.RequireRole("Федерация");
+                });
+            });
             services.AddIdentity<IdentityUser, IdentityRole>(opts =>
             {
                 opts.User.AllowedUserNameCharacters = string.Empty;
