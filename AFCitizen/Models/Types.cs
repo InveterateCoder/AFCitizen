@@ -8,13 +8,6 @@ namespace AFCitizen.Models
         public static string Жалоба = "Жалоба";
         public static string Предложение = "Предложение";
     }
-
-    public static class AuthorityType
-    {
-        public static string МВД = "МВД";
-        public static string Прокуратура = "Прокуратура";
-        public static string АрбСуд = "Арбитражный Суд";
-    }
     public class Body
     {
         public string LastName { get; set; }
@@ -49,70 +42,150 @@ namespace AFCitizen.Models
     {
         public string Reply { get; set; }
     }
-
+    public static class AuthorityType
+    {
+        public static string Прокуратура = "Прокуратура";
+        public static string АрбСуд = "Арбитражный Суд";
+    }
     public class Authority
     {
-        public string Name { get; set; }
-        public int HierarchyLevel { get; set; }
-    }
-    /*public static class Federation
-    {
-        public static Dictionary<string, Subject> Subjects = new Dictionary<string, Subject>
+        public static Dictionary<string, Dictionary<string, Authority[]>> Cities = new Dictionary<string, Dictionary<string, Authority[]>>
         {
-            ["Ставропольский Край"] = new Subject
+            ["Ессентуки"] = new Dictionary<string, Authority[]>
             {
-                Authorities = new Dictionary<string, string>
+                [AuthorityType.АрбСуд] = new Authority[4]
                 {
-                    [AuthorityType.МВД] = "МВД по Став. краю",
-                    [AuthorityType.Прокуратура] = "Прокуратура Ст. края",
-                    [AuthorityType.АрбСуд] = "Арбитражный Суд Ст. края"
-                },
-                Cities = new Dictionary<string, Dictionary<string, string>>
-                {
-                    ["Ессентуки"] = new Dictionary<string, string>
+                    new Authority
                     {
-                        [AuthorityType.МВД] = "",
-                        [AuthorityType.Прокуратура] = "",
-                        [AuthorityType.АрбСуд] = ""
+                        Name = "Арбитражный суд Ставропольского края",
+                        Level = 1
                     },
-                    ["Ставрополь"] = new Dictionary<string, string>
+                    new Authority
                     {
-                        [AuthorityType.МВД] = "",
-                        [AuthorityType.Прокуратура] = "",
-                        [AuthorityType.АрбСуд] = ""
+                        Name = "Шестнадцатый арбитражный апелляционный суд",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Арбитражный суд Северо-Кавказского округ",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Высший Арбитражный Суд РФ",
+                        Level = 3
+                    }
+                },
+                [AuthorityType.Прокуратура] = new Authority[3]
+                {
+                    new Authority
+                    {
+                        Name = "Прокуратура города Ессентуки",
+                        Level = 1
+                    },
+                    new Authority
+                    {
+                        Name = "Прокуратура Ставропольского края",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Генеральная Прокуратура РФ",
+                        Level = 3
                     }
                 }
             },
-            ["Московская область"] = new Subject
+            ["Ставрополь"] = new Dictionary<string, Authority[]>
             {
-                Authorities = new Dictionary<string, string>
+                [AuthorityType.АрбСуд] = new Authority[4]
                 {
-                    [AuthorityType.МВД] = "МВД по Мос. области",
-                    [AuthorityType.Прокуратура] = "Прокуратура Мос. области",
-                    [AuthorityType.АрбСуд] = "Арбитражный Суд Мос. области"
-                },
-                Cities = new Dictionary<string, Dictionary<string, string>>
-                {
-                    ["Балашиха"] = new Dictionary<string, string>
+                    new Authority
                     {
-                        [AuthorityType.МВД] = "",
-                        [AuthorityType.Прокуратура] = "",
-                        [AuthorityType.АрбСуд] = ""
+                        Name = "Арбитражный суд Ставропольского края",
+                        Level = 1
                     },
-                    ["Москва"] = new Dictionary<string, string>
+                    new Authority
                     {
-                        [AuthorityType.МВД] = "",
-                        [AuthorityType.Прокуратура] = "",
-                        [AuthorityType.АрбСуд] = ""
+                        Name = "Шестнадцатый арбитражный апелляционный суд",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Арбитражный суд Северо-Кавказского округ",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Высший Арбитражный Суд РФ",
+                        Level = 3
+                    }
+                },
+                [AuthorityType.Прокуратура] = new Authority[3]
+                {
+                    new Authority
+                    {
+                        Name = "Прокуратура города Ставрополь",
+                        Level = 1
+                    },
+                    new Authority
+                    {
+                        Name = "Прокуратура Ставропольского края",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Генеральная Прокуратура РФ",
+                        Level = 3
+                    }
+                }
+            },
+            ["Москва"] = new Dictionary<string, Authority[]>
+            {
+                [AuthorityType.АрбСуд] = new Authority[4]
+                {
+                    new Authority
+                    {
+                        Name = "Арбитражный суд города Москвы",
+                        Level = 1
+                    },
+                    new Authority
+                    {
+                        Name = "Девятый арбитражный апелляционный суд",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Арбитражный суд Московского округа",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Высший Арбитражный Суд РФ",
+                        Level = 3
+                    }
+                },
+                [AuthorityType.Прокуратура] = new Authority[3]
+                {
+                    new Authority
+                    {
+                        Name = "Прокуратура города Москвы",
+                        Level = 1
+                    },
+                    new Authority
+                    {
+                        Name = "Прокуратура Московской области",
+                        Level = 2
+                    },
+                    new Authority
+                    {
+                        Name = "Генеральная Прокуратура РФ",
+                        Level = 3
                     }
                 }
             }
-        }
+        };
+        public string Name { get; set; }
+        public int Level { get; set; }
     }
-
-    public class Subject
-    {
-        public Dictionary<string, string> Authorities;
-        public Dictionary<string, Dictionary<string, string>> Cities;
-    }*/
+    
 }
