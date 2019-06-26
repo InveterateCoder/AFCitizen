@@ -17,46 +17,46 @@ namespace AFCitizen
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<UserIdentityDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("Users")));
-            services.AddDbContext<UserDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("UserDb")));
-            services.AddDbContext<CityDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("CityDb")));
-            services.AddDbContext<SubjectDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("SubjectDb")));
-            services.AddDbContext<FedDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("FedDb")));
+            services.AddDbContext<UserLevelDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("UserLevel")));
+            services.AddDbContext<FirstLevelDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("FirstLevel")));
+            services.AddDbContext<MidLevelDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("MidLevel")));
+            services.AddDbContext<TopLevelDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("TopLevel")));
             services.AddAuthorization(opts =>
             {
-                opts.AddPolicy("СубДисп", policy =>
+                opts.AddPolicy("ПервДисп", policy =>
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireRole("Диспетчер");
-                    policy.RequireRole("Субъект");
+                    policy.RequireRole("ПервУровень");
                 });
-                opts.AddPolicy("ГорДисп", policy =>
+                opts.AddPolicy("СредДисп", policy =>
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireRole("Диспетчер");
-                    policy.RequireRole("Город");
+                    policy.RequireRole("СредУровень");
                 });
-                opts.AddPolicy("ФедДисп", policy =>
+                opts.AddPolicy("ТопДисп", policy =>
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireRole("Диспетчер");
-                    policy.RequireRole("Федерация");
+                    policy.RequireRole("ТопУровень");
                 });
-                opts.AddPolicy("СубАг", policy =>
+                opts.AddPolicy("ПервАг", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireRole("Субъект");
+                    policy.RequireRole("ПервУровень");
                     policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
                 });
-                opts.AddPolicy("ГорАг", policy =>
+                opts.AddPolicy("СредАг", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireRole("Город");
+                    policy.RequireRole("СредУровень");
                     policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
                 });
-                opts.AddPolicy("ФедАг", policy =>
+                opts.AddPolicy("ТопАг", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireRole("Федерация");
+                    policy.RequireRole("ТопУровень");
                     policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
                 });
             });
