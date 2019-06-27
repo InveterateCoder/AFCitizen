@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AFCitizen.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,9 +9,9 @@ namespace AFCitizen.Infrastructure
     [HtmlTargetElement("td", Attributes = "identity-role")]
     public class RoleUsersTagHelper : TagHelper
     {
-        private UserManager<IdentityUser> userManager;
+        private UserManager<CitizenUser> userManager;
         private RoleManager<IdentityRole> roleManager;
-        public RoleUsersTagHelper(UserManager<IdentityUser> usermgr,
+        public RoleUsersTagHelper(UserManager<CitizenUser> usermgr,
             RoleManager<IdentityRole> rolemgr)
         {
             userManager = usermgr;

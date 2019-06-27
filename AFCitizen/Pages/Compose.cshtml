@@ -7,6 +7,7 @@
         <div class="jumbotron">
             <div class="display-4 text-info">Обращение</div>
         </div>
+        <div class="text-danger" asp-validation-summary="All"></div>
         <form asp-page="Compose" method="post">
             <h3>Кому</h3>
             <hr />
@@ -25,7 +26,7 @@
                     <div class="input-group-prepend">
                         <span style="width:200px" class="input-group-text">Куда:</span>
                     </div>
-                    <select asp-for="Authority" class="custom-select" asp-items="new SelectList(AFCitizen.Models.AuthorityType.Names())">
+                    <select asp-for="AuthorityType" class="custom-select" asp-items="new SelectList(AFCitizen.Models.AuthorityType.Names())">
                         <option value="null" selected>Выберите из списка</option>
                     </select>
                 </div>

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AFCitizen.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,8 +10,8 @@ namespace AFCitizen.Pages.Admin.Roles
     public class EditModel : PageModel
     {
         private RoleManager<IdentityRole> roleManager;
-        private UserManager<IdentityUser> userManager;
-        public EditModel(RoleManager<IdentityRole> roleMgr, UserManager<IdentityUser> userMgr)
+        private UserManager<CitizenUser> userManager;
+        public EditModel(RoleManager<IdentityRole> roleMgr, UserManager<CitizenUser> userMgr)
         {
             roleManager = roleMgr;
             userManager = userMgr;
@@ -19,9 +20,9 @@ namespace AFCitizen.Pages.Admin.Roles
         public async Task OnGetAsync(string id)
         {
             IdentityRole role = await roleManager.FindByIdAsync(id);
-            List<IdentityUser> members = new List<IdentityUser>();
-            List<IdentityUser> nonMembers = new List<IdentityUser>();
-            foreach (IdentityUser user in userManager.Users)
+            List<CitizenUser> members = new List<CitizenUser>();
+            List<CitizenUser> nonMembers = new List<CitizenUser>();
+            foreach (CitizenUser user in userManager.Users)
             {
                 var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
                 list.Add(user);
@@ -40,7 +41,7 @@ namespace AFCitizen.Pages.Admin.Roles
             {
                 foreach (string userId in model.IdsToAdd ?? new string[] { })
                 {
-                    IdentityUser user = await userManager.FindByIdAsync(userId);
+                    CitizenUser user = await userManager.FindByIdAsync(userId);
                     if (user != null)
                     {
                         result = await userManager.AddToRoleAsync(user, model.RoleName);
@@ -51,7 +52,7 @@ namespace AFCitizen.Pages.Admin.Roles
             }
             foreach (string userId in model.IdsToDelete ?? new string[] { })
             {
-                IdentityUser user = await userManager.FindByIdAsync(userId);
+                CitizenUser user = await userManager.FindByIdAsync(userId);
                 if (user != null)
                 {
                     result = await userManager.RemoveFromRoleAsync(user, model.RoleName);

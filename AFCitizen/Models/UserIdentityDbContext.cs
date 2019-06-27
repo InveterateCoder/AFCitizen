@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AFCitizen.Models
 {
-    public class UserIdentityDbContext : IdentityDbContext<IdentityUser>
+    public class UserIdentityDbContext : IdentityDbContext<CitizenUser>
     {
         public UserIdentityDbContext(DbContextOptions<UserIdentityDbContext> options) : base(options) { }
     }

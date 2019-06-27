@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using AFCitizen.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,9 +10,9 @@ namespace AFCitizen.Pages.Account
     public class RegisterModel : PageModel
     {
         public RoleManager<IdentityRole> roleManager;
-        public UserManager<IdentityUser> userManager;
-        public SignInManager<IdentityUser> signinManager;
-        public RegisterModel(RoleManager<IdentityRole> roleMgr, UserManager<IdentityUser> userMgr, SignInManager<IdentityUser>signinMgr)
+        public UserManager<CitizenUser> userManager;
+        public SignInManager<CitizenUser> signinManager;
+        public RegisterModel(RoleManager<IdentityRole> roleMgr, UserManager<CitizenUser> userMgr, SignInManager<CitizenUser> signinMgr)
         {
             roleManager = roleMgr;
             userManager = userMgr;
@@ -34,7 +35,7 @@ namespace AFCitizen.Pages.Account
                     ModelState.AddModelError("", "Роль \"Пользователь\" не найдена, свяжитесь с администратором.");
                 else
                 {
-                    IdentityUser user = new IdentityUser
+                    CitizenUser user = new CitizenUser
                     {
                         UserName = Name,
                         Email = Email

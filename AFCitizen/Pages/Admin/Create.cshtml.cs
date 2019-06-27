@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AFCitizen.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,18 +8,20 @@ namespace AFCitizen.Pages.Admin
 {
     public class CreateModel : PageModel
     {
-        private UserManager<IdentityUser> userManager;
-        public CreateModel(UserManager<IdentityUser> usrMgr) => userManager = usrMgr;
+        private UserManager<CitizenUser> userManager;
+        public CreateModel(UserManager<CitizenUser> usrMgr) => userManager = usrMgr;
         [BindProperty]
         public Models.Admin.CreateMod Form { get; set; } = new Models.Admin.CreateMod();
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = new IdentityUser
+                CitizenUser user = new CitizenUser
                 {
                     UserName = Form.User,
-                    Email = Form.Email
+                    Email = Form.Email,
+                    Dispatcher = Form.Dispatcher,
+                    Position = Form.Position
                 };
                 IdentityResult result = await userManager.CreateAsync(user, Form.Password);
                 if (result.Succeeded)

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AFCitizen.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,12 +8,12 @@ namespace AFCitizen.Pages.Admin
 {
     public class EditModel : PageModel
     {
-        private UserManager<IdentityUser> userManager;
-        private IUserValidator<IdentityUser> userValidator;
-        private IPasswordValidator<IdentityUser> passwordValidator;
-        private IPasswordHasher<IdentityUser> passwordHasher;
-        public EditModel(UserManager<IdentityUser> usrMgr, IUserValidator<IdentityUser> userValid,
-            IPasswordValidator<IdentityUser> passValid, IPasswordHasher<IdentityUser> passwordHash)
+        private UserManager<CitizenUser> userManager;
+        private IUserValidator<CitizenUser> userValidator;
+        private IPasswordValidator<CitizenUser> passwordValidator;
+        private IPasswordHasher<CitizenUser> passwordHasher;
+        public EditModel(UserManager<CitizenUser> usrMgr, IUserValidator<CitizenUser> userValid,
+            IPasswordValidator<CitizenUser> passValid, IPasswordHasher<CitizenUser> passwordHash)
         {
             userManager = usrMgr;
             userValidator = userValid;
@@ -24,12 +25,14 @@ namespace AFCitizen.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            IdentityUser user = await userManager.FindByIdAsync(id);
+            CitizenUser user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
                 Form.Id = user.Id;
                 Form.User = user.UserName;
                 Form.Email = user.Email;
+                Form.Dispatcher = user.Dispatcher;
+                Form.Position = user.Position;
                 return Page();
             }
             else
@@ -37,11 +40,22 @@ namespace AFCitizen.Pages.Admin
         }
         public async Task<IActionResult> OnPostAsync(string password)
         {
-            IdentityUser _user = await userManager.FindByIdAsync(Form.Id);
+            CitizenUser _user = await userManager.FindByIdAsync(Form.Id);
+            bool isDispPosModified = false;
             if (_user != null)
             {
                 if (!string.IsNullOrEmpty(Form.User))
                     _user.UserName = Form.User;
+                if(Form.Dispatcher != _user.Dispatcher)
+                {
+                    _user.Dispatcher = Form.Dispatcher;
+                    isDispPosModified = true;
+                }
+                if(Form.Position != _user.Position)
+                {
+                    _user.Position = Form.Position;
+                    isDispPosModified = true;
+                }
                 IdentityResult validEmail = null;
                 if (!string.IsNullOrEmpty(Form.Email))
                 {
@@ -59,7 +73,7 @@ namespace AFCitizen.Pages.Admin
                     else
                         AddErrorsFromResult(validPass);
                 }
-                if (!((string.IsNullOrEmpty(Form.User) && (validPass == null && validEmail == null)) || (validEmail != null && !validEmail.Succeeded || validPass != null && !validPass.Succeeded)))
+                if (!(!isDispPosModified || (string.IsNullOrEmpty(Form.User) && (validPass == null && validEmail == null)) || (validEmail != null && !validEmail.Succeeded || validPass != null && !validPass.Succeeded)))
                 {
                     IdentityResult result = await userManager.UpdateAsync(_user);
                     if (result.Succeeded)

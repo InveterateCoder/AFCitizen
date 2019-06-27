@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using AFCitizen.Models;
 
 namespace AFCitizen.Pages.Account
 {
@@ -21,14 +22,14 @@ namespace AFCitizen.Pages.Account
                 isAuthority = true;
             ViewData["returnUrl"] = returnUrl;
         }
-        public async Task<IActionResult> OnPostAsync(string returnUrl, [FromServices]UserManager<IdentityUser> userMgr, [FromServices]SignInManager<IdentityUser> signinMgr)
+        public async Task<IActionResult> OnPostAsync(string returnUrl, [FromServices]UserManager<CitizenUser> userMgr, [FromServices]SignInManager<CitizenUser> signinMgr)
         {
             if (ModelState.IsValid)
             {
                 if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || returnUrl == "/Index")
                 {
                     isAuthority = false;
-                    IdentityUser user = await userMgr.FindByEmailAsync(Email);
+                    CitizenUser user = await userMgr.FindByEmailAsync(Email);
                     if (user != null)
                     {
                         if (await userMgr.IsInRoleAsync(user, "Пользователь"))
@@ -51,7 +52,7 @@ namespace AFCitizen.Pages.Account
                 else
                 {
                     isAuthority = true;
-                    IdentityUser user = await userMgr.FindByEmailAsync(Email);
+                    CitizenUser user = await userMgr.FindByEmailAsync(Email);
                     if (user != null)
                     {
                         if (await userMgr.IsInRoleAsync(user, "Город"))

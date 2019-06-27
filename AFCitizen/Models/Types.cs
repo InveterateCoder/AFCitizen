@@ -11,7 +11,7 @@ namespace AFCitizen.Models
         public static string Предложение => "Предложение";
         public static IEnumerable<string> Names() => typeof(DocType).GetProperties().Select(i => (string)i.GetValue(null));
     }
-    public class Body
+    public class Request
     {
         [Required]
         public string From { get; set; }
@@ -31,8 +31,8 @@ namespace AFCitizen.Models
 
     public class Appeal
     {
-        public Body Body { get; set; }
-        public Close Close { get; set; }
+        public Request Request { get; set; }
+        public Reply Close { get; set; }
     }
 
     public class Assign
@@ -43,9 +43,10 @@ namespace AFCitizen.Models
         public string Position { get; set; }
     }
 
-    public class Close
+    public class Reply
     {
-        public string Reply { get; set; }
+        public string From { get; set; }
+        public string Body { get; set; }
     }
     public static class AuthorityType
     {
@@ -195,7 +196,7 @@ namespace AFCitizen.Models
             }
         };
         public string Name { get; set; }
-        public int Level { get; set; }
+        public ushort Level { get; set; }
     }
     
 }

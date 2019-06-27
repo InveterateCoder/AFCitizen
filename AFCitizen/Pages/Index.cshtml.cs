@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AFCitizen.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,14 +23,14 @@ namespace AFCitizen.Pages
                 else
                 {
                     TempData["IsAuthenticated"] = false;
-                    var signMgr = (SignInManager<IdentityUser>)HttpContext.RequestServices.GetService(typeof(SignInManager<IdentityUser>));
+                    var signMgr = (SignInManager<CitizenUser>)HttpContext.RequestServices.GetService(typeof(SignInManager<CitizenUser>));
                     await signMgr.SignOutAsync();
                 }
             }
             else
                 TempData["IsAuthenticated"] = false;
         }
-        public async void OnGetSignOutAsync([FromServices]SignInManager<IdentityUser> signinMgr)
+        public async void OnGetSignOutAsync([FromServices]SignInManager<CitizenUser> signinMgr)
         {
             await signinMgr.SignOutAsync();
             TempData["IsAuthenticated"] = false;

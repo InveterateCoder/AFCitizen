@@ -60,7 +60,7 @@ namespace AFCitizen
                     policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
                 });
             });
-            services.AddIdentity<IdentityUser, IdentityRole>(opts =>
+            services.AddIdentity<CitizenUser, IdentityRole>(opts =>
             {
                 opts.User.AllowedUserNameCharacters = string.Empty;
                 opts.User.RequireUniqueEmail = true;
