@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AFCitizen.Pages
 {
-    public class privilegesModel : PageModel
+    public class PrivilegesModel : PageModel
     {
         public void OnGet()
         {

@@ -9,6 +9,12 @@ namespace AFCitizen.Pages
 {
     public class ComposeModel : PageModel
     {
+        [BindProperty]
+        public Models.Body Body { get; set; } = new Models.Body();
+        [BindProperty]
+        public string City { get; set; }
+        [BindProperty]
+        public string Authority { get; set; }
         public void OnGet()
         {
         }

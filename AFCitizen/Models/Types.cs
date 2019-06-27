@@ -1,20 +1,25 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace AFCitizen.Models
 {
     public static class DocType
     {
-        public static string Заявление = "Заявление";
-        public static string Жалоба = "Жалоба";
-        public static string Предложение = "Предложение";
+        public static string Заявление => "Заявление";
+        public static string Жалоба => "Жалоба";
+        public static string Предложение => "Предложение";
+        public static IEnumerable<string> Names() => typeof(DocType).GetProperties().Select(i => (string)i.GetValue(null));
     }
     public class Body
     {
-        public string LastName { get; set; }
-        public string Name { get; set; }
-        public string Patronymic { get; set; }
+        [Required]
+        public string From { get; set; }
+        [Required]
         public string Address { get; set; }
+        [Required]
         public string Type { get; set; }
+        [Required]
         public string Text { get; set; }
     }
 
@@ -44,11 +49,16 @@ namespace AFCitizen.Models
     }
     public static class AuthorityType
     {
-        public static string Прокуратура = "Прокуратура";
-        public static string АрбСуд = "Арбитражный Суд";
+        public static string Прокуратура => "Прокуратура";
+        public static string АрбСуд => "Арбитражный Суд";
+        public static IEnumerable<string> Names() => typeof(AuthorityType).GetProperties().Select(i => (string)i.GetValue(null));
     }
     public class Authority
     {
+        public Authority()
+        {
+            
+        }
         public static Dictionary<string, Dictionary<string, Authority[]>> Cities = new Dictionary<string, Dictionary<string, Authority[]>>
         {
             ["Ессентуки"] = new Dictionary<string, Authority[]>

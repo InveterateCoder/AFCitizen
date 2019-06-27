@@ -19,7 +19,7 @@
                     <tr>
                         <td>@role.Name</td>
                         <td identity-role="@role.Id"></td>
-                        <td>
+                        <td style="min-width:150px">
                             <form asp-page="Index" asp-route-id="@role.Id" method="post">
                                 <a style="display:inline-block; width:49%" class="btn btn-sm btn-outline-primary" asp-page="Edit" asp-route-id="@role.Id">Править</a>
                                 <button type="submit" style="display:inline-block; width:49%; float:right" class="btn btn-sm btn-outline-danger">Удалить</button>
