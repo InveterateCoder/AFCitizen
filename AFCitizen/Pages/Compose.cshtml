@@ -38,7 +38,7 @@
                     <div class="input-group-prepend">
                         <span style="width:200px" class="input-group-text">Ф.И.О. полностью:</span>
                     </div>
-                    <input asp-for="Body.From" type="text" class="form-control" />
+                    <input asp-for="Doc.From" type="text" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
@@ -46,7 +46,7 @@
                     <div class="input-group-prepend">
                         <span style="width:200px" class="input-group-text">Адрес:</span>
                     </div>
-                    <input asp-for="Body.Address" type="text" class="form-control" />
+                    <input asp-for="Doc.Address" type="text" class="form-control" />
                 </div>
             </div>
             <h3>Обращение</h3>
@@ -55,14 +55,14 @@
                 <div class="input-group-prepend">
                     <span style="width:200px" class="input-group-text">Тип обращения:</span>
                 </div>
-                <select id="doctype" asp-for="Body.Type" class="custom-select" asp-items="new SelectList(AFCitizen.Models.DocType.Names())">
+                <select id="doctype" asp-for="Doc.Type" class="custom-select" asp-items="new SelectList(AFCitizen.Models.DocType.Names())">
                     <option value="null" selected>Выберите из списка</option>
                 </select>
             </div>
             <div id="hide" style="display:none; margin-bottom:50px">
                 <div class="form-group">
                     <h4 id="docheader" class="text-center mb-2 mt-3"></h4>
-                    <textarea id="body" asp-for="Body.Text" class="form-control" style="resize:none; overflow-y:hidden;"></textarea>
+                    <textarea id="body" asp-for="Doc.Text" class="form-control" style="resize:none; overflow-y:hidden;"></textarea>
                 </div>
                 <button type="submit" class="btn btn-outline-primary btn-block">Отправить</button>
                 <a asp-page="Index" class="btn btn-outline-secondary btn-block">Отмена</a>

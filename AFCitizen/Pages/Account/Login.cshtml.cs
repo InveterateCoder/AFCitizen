@@ -14,19 +14,25 @@ namespace AFCitizen.Pages.Account
         [Required, BindProperty]
         public string Password { get; set; }
         public bool isAuthority { get; set; }
-        public void OnGet(string returnUrl)
+        public IActionResult OnGet(string returnUrl)
         {
-            if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || returnUrl == "/Index")
+            if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || string.Equals(returnUrl, "/Index", System.StringComparison.OrdinalIgnoreCase)
+                || string.Equals(returnUrl, "/Compose", System.StringComparison.OrdinalIgnoreCase))
                 isAuthority = false;
-            else
+            else if (string.Equals(returnUrl, "/Dispatcher", System.StringComparison.OrdinalIgnoreCase)
+                || string.Equals(returnUrl, "/Agent", System.StringComparison.OrdinalIgnoreCase))
                 isAuthority = true;
+            else
+                return RedirectToPage("AccessDenied");
             ViewData["returnUrl"] = returnUrl;
+            return Page();
         }
         public async Task<IActionResult> OnPostAsync(string returnUrl, [FromServices]UserManager<CitizenUser> userMgr, [FromServices]SignInManager<CitizenUser> signinMgr)
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || returnUrl == "/Index")
+                if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || string.Equals(returnUrl, "/Index", System.StringComparison.OrdinalIgnoreCase)
+                || string.Equals(returnUrl, "/Compose", System.StringComparison.OrdinalIgnoreCase))
                 {
                     isAuthority = false;
                     CitizenUser user = await userMgr.FindByEmailAsync(Email);
@@ -79,7 +85,8 @@ namespace AFCitizen.Pages.Account
             }
             else
             {
-                if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || returnUrl == "/Index")
+                if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/" || string.Equals(returnUrl, "/Index", System.StringComparison.OrdinalIgnoreCase)
+                || string.Equals(returnUrl, "/Compose", System.StringComparison.OrdinalIgnoreCase))
                     isAuthority = false;
                 else
                     isAuthority = true;

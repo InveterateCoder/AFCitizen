@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace AFCitizen.Pages
 {
+    [Authorize(Roles = "Пользователь")]
     public class ComposeModel : PageModel
     {
         [BindProperty]
-        public Models.Document Body { get; set; } = new Models.Document();
+        public Models.Document Doc { get; set; } = new Models.Document();
         [Required, BindProperty]
         public string City { get; set; }
         [Required, BindProperty]
@@ -42,10 +42,17 @@ namespace AFCitizen.Pages
                 else
                 {
                     Models.Block block = new Models.Block();
-                    //block.AuthorityLevel = authority.Level;
                     block.From = User.Identity.Name;
                     block.To = authority.Name;
                     block.Type = Models.BlockType.Open;
+                    block.Document = Newtonsoft.Json.JsonConvert.SerializeObject(Doc);
+                    block.PreviousHash = "origin";
+                    block.Hash = Models.Block.ComputeHash(block);
+                    await userDbContext.Blocks.AddAsync(block);
+                    await userDbContext.SaveChangesAsync();
+                    await levelDbContext.Blocks.AddAsync(block);
+                    await ((DbContext)levelDbContext).SaveChangesAsync();
+                    return RedirectToPage("Index");
                 }
             }
             return Page();
