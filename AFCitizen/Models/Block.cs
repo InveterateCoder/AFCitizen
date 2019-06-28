@@ -11,6 +11,7 @@ namespace AFCitizen.Models
         public string DocId { get; } = Guid.NewGuid().ToString();
         public string TimeStamp { get; } = DateTime.UtcNow.ToString();
         public BlockType Type { get; set; }
+        public string AuthorityType { get; set; }
         public string From { get; set; }
         public string To { get; set; }
         public string Document { get; set; } // JSON for Document

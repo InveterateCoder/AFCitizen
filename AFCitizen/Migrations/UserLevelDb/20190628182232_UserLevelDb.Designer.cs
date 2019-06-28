@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace AFCitizen.Migrations.TopLevelDb
+namespace AFCitizen.Migrations.UserLevelDb
 {
-    [DbContext(typeof(TopLevelDbContext))]
-    [Migration("20190628054401_TopLevelDb")]
-    partial class TopLevelDb
+    [DbContext(typeof(UserLevelDbContext))]
+    [Migration("20190628182232_UserLevelDb")]
+    partial class UserLevelDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,8 @@ namespace AFCitizen.Migrations.TopLevelDb
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AuthorityType");
 
                     b.Property<string>("Document");
 

@@ -43,6 +43,7 @@ namespace AFCitizen.Pages
                 {
                     Models.Block block = new Models.Block();
                     block.From = User.Identity.Name;
+                    block.AuthorityType = AuthorityType;
                     block.To = authority.Name;
                     block.Type = Models.BlockType.Open;
                     block.Document = Newtonsoft.Json.JsonConvert.SerializeObject(Doc);

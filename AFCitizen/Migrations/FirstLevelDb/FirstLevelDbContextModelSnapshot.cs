@@ -23,6 +23,8 @@ namespace AFCitizen.Migrations.FirstLevelDb
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AuthorityType");
+
                     b.Property<string>("Document");
 
                     b.Property<string>("From");
