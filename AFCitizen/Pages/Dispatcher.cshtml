@@ -5,26 +5,38 @@
 }
     <div class="container">
         <div class="jumbotron">
-            <h1>@Model.Header</h1>
+            <h1>@Model.Authority</h1>
             <p>Честно и усердно исполняйте свой долг перед народом! Трудитесь во благо нашей с вами страны!</p>
         </div>
-        <div id="accordion">
-            <div class="card">
-                <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                        От: Артур Григорян / Дата: 02/22/3021
-                    </a>
-                </div>
-                <div id="collapseOne" class="collapse hide" data-parent="#accordion">
-                    <div class="card-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        @if (Model.OpenBlocks.Count() > 0)
+        {
+            int i = 0;
+            <div id="accordion">
+                @foreach(var block in Model.OpenBlocks)
+                {
+                    i++;
+                    AFCitizen.Models.Document doc = (AFCitizen.Models.Document)Newtonsoft.Json.JsonConvert.DeserializeObject(block.Document, typeof(AFCitizen.Models.Document));
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" data-toggle="collapse" href="@($"#collapse{i.ToString()}")">
+                                От: @doc.From / Дата: @DateTime.Parse(block.TimeStamp).ToString()
+                                <br>
+                                Адрес: @doc.Address
+                            </a>
+                        </div>
+                        <div id="@($"collapse{i.ToString()}")" class="collapse hide" data-parent="#accordion">
+                            <div class="card-body">
+                                <h3 class="text-center">@doc.Type</h3>
+                                <p>@doc.Text</p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-outline-success btn-block">Назначить</button>
+                                <button class="btn btn-outline-primary btn-block">Перенаправить</button>
+                                <button class="btn btn-outline-danger btn-block">Закрыть</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <button class="btn btn-outline-success btn-block">Назначить</button>
-                        <button class="btn btn-outline-primary btn-block">Перенаправить</button>
-                        <button class="btn btn-outline-danger btn-block">Закрыть</button>
-                    </div>
-                </div>
+                }
             </div>
-        </div>
+        }
     </div>
