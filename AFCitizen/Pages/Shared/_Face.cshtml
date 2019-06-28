@@ -13,16 +13,17 @@
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="~/">Главная</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" asp-page="Compose">Написать</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Архив</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown">Мои обращения</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Активные</a>
+                            <a class="dropdown-item" href="#">Архив</a>
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-page="Privileges">Поиск Льгот</a>
+                        <a class="nav-link" asp-page="Privileges">Мои Льготы</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -38,7 +39,7 @@
                     else
                     {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Авторизация</a>
+                            <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown">Авторизация</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="/Account/Register">Регистрация</a>
                                 <a class="dropdown-item" href="/Account/Login">Войти</a>
