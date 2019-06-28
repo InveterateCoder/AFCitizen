@@ -11,7 +11,7 @@ namespace AFCitizen.Models
         public static string Предложение => "Предложение";
         public static IEnumerable<string> Names() => typeof(DocType).GetProperties().Select(i => (string)i.GetValue(null));
     }
-    public class Request
+    public class Document
     {
         [Required]
         public string From { get; set; }
@@ -29,24 +29,20 @@ namespace AFCitizen.Models
         public string Comment { get; set; }
     }
 
-    public class Appeal
-    {
-        public Request Request { get; set; }
-        public Reply Close { get; set; }
-    }
-
     public class Assign
     {
         public string To { get; set; }
-        public string AgentLastName { get; set; }
-        public string AgentName { get; set; }
+        public string AgentFullName { get; set; }
         public string Position { get; set; }
     }
 
     public class Reply
     {
         public string From { get; set; }
+        public string AgentFullName { get; set; }
+        public string Position { get; set; }
         public string Body { get; set; }
+        public string Comment { get; set; }
     }
     public static class AuthorityType
     {
@@ -56,10 +52,6 @@ namespace AFCitizen.Models
     }
     public class Authority
     {
-        public Authority()
-        {
-            
-        }
         public static Dictionary<string, Dictionary<string, Authority[]>> Cities = new Dictionary<string, Dictionary<string, Authority[]>>
         {
             ["Ессентуки"] = new Dictionary<string, Authority[]>

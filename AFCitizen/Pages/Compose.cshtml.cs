@@ -11,7 +11,7 @@ namespace AFCitizen.Pages
     public class ComposeModel : PageModel
     {
         [BindProperty]
-        public Models.Request Body { get; set; } = new Models.Request();
+        public Models.Document Body { get; set; } = new Models.Document();
         [Required, BindProperty]
         public string City { get; set; }
         [Required, BindProperty]
@@ -42,13 +42,13 @@ namespace AFCitizen.Pages
                 else
                 {
                     Models.Block block = new Models.Block();
-                    block.AuthorityLevel = authority.Level;
+                    //block.AuthorityLevel = authority.Level;
                     block.From = User.Identity.Name;
                     block.To = authority.Name;
                     block.Type = Models.BlockType.Open;
                 }
             }
-            //return Page();
+            return Page();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AFCitizen.Migrations.FirstLevelDb
+namespace AFCitizen.Migrations.TopLevelDb
 {
-    public partial class FirstLevelDb : Migration
+    public partial class TopLevelDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,8 +14,9 @@ namespace AFCitizen.Migrations.FirstLevelDb
                     Type = table.Column<int>(nullable: false),
                     From = table.Column<string>(nullable: true),
                     To = table.Column<string>(nullable: true),
-                    AuthorityLevel = table.Column<int>(nullable: false),
                     Document = table.Column<string>(nullable: true),
+                    Replies = table.Column<string>(nullable: true),
+                    TypeMessage = table.Column<string>(nullable: true),
                     PreviousHash = table.Column<string>(nullable: true),
                     Hash = table.Column<string>(nullable: true)
                 },

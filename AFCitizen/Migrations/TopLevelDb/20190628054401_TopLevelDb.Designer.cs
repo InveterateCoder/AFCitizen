@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFCitizen.Migrations.TopLevelDb
 {
     [DbContext(typeof(TopLevelDbContext))]
-    [Migration("20190626192619_TopLevelDb")]
+    [Migration("20190628054401_TopLevelDb")]
     partial class TopLevelDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,8 +25,6 @@ namespace AFCitizen.Migrations.TopLevelDb
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AuthorityLevel");
-
                     b.Property<string>("Document");
 
                     b.Property<string>("From");
@@ -35,9 +33,13 @@ namespace AFCitizen.Migrations.TopLevelDb
 
                     b.Property<string>("PreviousHash");
 
+                    b.Property<string>("Replies");
+
                     b.Property<string>("To");
 
                     b.Property<int>("Type");
+
+                    b.Property<string>("TypeMessage");
 
                     b.HasKey("Id");
 
