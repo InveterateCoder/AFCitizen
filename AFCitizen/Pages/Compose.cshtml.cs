@@ -47,8 +47,8 @@ namespace AFCitizen.Pages
                     block.To = authority.Name;
                     block.Type = Models.BlockType.Open;
                 }
-
             }
+            //return Page();
         }
     }
 }

@@ -23,40 +23,16 @@ namespace AFCitizen
             services.AddDbContext<TopLevelDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("TopLevel")));
             services.AddAuthorization(opts =>
             {
-                opts.AddPolicy("ПервДисп", policy =>
+                opts.AddPolicy("Диспетчер", policy =>
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireRole("Диспетчер");
-                    policy.RequireRole("ПервУровень");
+                    policy.RequireRole("ПервУровень", "СредУровень", "ТопУровень");
                 });
-                opts.AddPolicy("СредДисп", policy =>
+                opts.AddPolicy("Агент", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireRole("Диспетчер");
-                    policy.RequireRole("СредУровень");
-                });
-                opts.AddPolicy("ТопДисп", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireRole("Диспетчер");
-                    policy.RequireRole("ТопУровень");
-                });
-                opts.AddPolicy("ПервАг", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireRole("ПервУровень");
-                    policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
-                });
-                opts.AddPolicy("СредАг", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireRole("СредУровень");
-                    policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
-                });
-                opts.AddPolicy("ТопАг", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireRole("ТопУровень");
+                    policy.RequireRole("ПервУровень", "СредУровень", "ТопУровень");
                     policy.RequireAssertion(handler => !handler.User.IsInRole("Диспетчер"));
                 });
             });

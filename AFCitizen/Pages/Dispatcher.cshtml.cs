@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AFCitizen.Pages.FirstLevel
+namespace AFCitizen.Pages
 {
-    [Authorize(Policy = "ПервАг")]
-    public class AgentModel : PageModel
+    [Authorize(Policy = "Диспетчер")]
+    public class DispatcherModel : PageModel
     {
         public string Header { get; set; }
         public void OnGet()

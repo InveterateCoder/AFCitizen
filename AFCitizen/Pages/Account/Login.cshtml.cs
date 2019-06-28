@@ -55,71 +55,23 @@ namespace AFCitizen.Pages.Account
                     CitizenUser user = await userMgr.FindByEmailAsync(Email);
                     if (user != null)
                     {
-                        if (await userMgr.IsInRoleAsync(user, "Город"))
+                        if (await userMgr.IsInRoleAsync(user, "ПервУровень") || await userMgr.IsInRoleAsync(user, "СредУровень") || await userMgr.IsInRoleAsync(user, "ТопУровень"))
                         {
-                            var result = await signinMgr.PasswordSignInAsync(user, Password, false, false);
+                            await signinMgr.SignOutAsync();
+                            Microsoft.AspNetCore.Identity.SignInResult result =
+                                await signinMgr.PasswordSignInAsync(user, Password, false, false);
                             if (result.Succeeded)
-                            {
-                                if (await userMgr.IsInRoleAsync(user, "Диспетчер"))
-                                {
-                                    return RedirectToPage("/City/Index");
-                                }
-                                else
-                                {
-                                    return RedirectToPage("/City/Agent");
-                                }
-                            }
+                                return Redirect(returnUrl ?? "/");
                             else
-                            {
-                                ModelState.AddModelError("", "Не получилось авторизоваться");
-                            }
+                                ModelState.AddModelError("", "Что то пошло не так, свяжитесь с администратором");
+
+                            if (await userMgr.IsInRoleAsync(user, "Диспетчер"))
+                                return RedirectToPage("/Dispatcher");
+                            else
+                                return RedirectToPage("/Agent");
                         }
                         else
-                        {
-                            if (await userMgr.IsInRoleAsync(user, "Субъект"))
-                            {
-                                var result = await signinMgr.PasswordSignInAsync(user, Password, false, false);
-                                if (result.Succeeded)
-                                {
-                                    if (await userMgr.IsInRoleAsync(user, "Диспетчер"))
-                                    {
-                                        return RedirectToPage("/Subject/Index");
-                                    }
-                                    else
-                                    {
-                                        return RedirectToPage("/Subject/Agent");
-                                    }
-                                }
-                                else
-                                {
-                                    ModelState.AddModelError("", "Не получилось авторизоваться");
-                                }
-                            }
-                            else
-                            {
-                                if (await userMgr.IsInRoleAsync(user, "Федерация"))
-                                {
-                                    var result = await signinMgr.PasswordSignInAsync(user, Password, false, false);
-                                    if (result.Succeeded)
-                                    {
-                                        if (await userMgr.IsInRoleAsync(user, "Диспетчер"))
-                                        {
-                                            return RedirectToPage("/Federation/Index");
-                                        }
-                                        else
-                                        {
-                                            return RedirectToPage("/Federation/Agent");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ModelState.AddModelError("", "Не получилось авторизоваться");
-                                    }
-                                }
-                                else
-                                    ModelState.AddModelError("", "Исполнитель не найден");
-                            }
-                        }
+                            ModelState.AddModelError("", "Уровень доступа не определён");
                     }
                     else
                         ModelState.AddModelError("", "Исполнитель не найден");
