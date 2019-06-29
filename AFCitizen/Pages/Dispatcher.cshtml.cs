@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AFCitizen.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -12,21 +14,23 @@ namespace AFCitizen.Pages
     public class DispatcherModel : PageModel
     {
         public string Authority { get; set; }
-        public IEnumerable<Models.Block> OpenBlocks;
-        public async Task<IActionResult> OnGetAsync()
+        public IEnumerable<Block> OpenBlocks;
+        public IEnumerable<CitizenUser> Employees;
+        public async Task<IActionResult> OnGetAsync([FromServices] UserManager<CitizenUser> userMgr)
         {
             Authority = User.Identity.Name;
-            Models.ILevelDbContext levelDbContext = null;
+            ILevelDbContext levelDbContext = null;
             if (User.IsInRole("ѕерв”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(Models.FirstLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(FirstLevelDbContext)) as Models.ILevelDbContext;
             else if (User.IsInRole("—ред”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(Models.MidLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(MidLevelDbContext)) as Models.ILevelDbContext;
             else if (User.IsInRole("“оп”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(Models.TopLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(TopLevelDbContext)) as Models.ILevelDbContext;
             if (levelDbContext == null)
                 return RedirectToPage("Error");
-            OpenBlocks = await Task.Run(() => levelDbContext.Blocks.Where(block => block.To == Authority && block.Type == Models.BlockType.Open
-                  && !levelDbContext.Blocks.Any(rep => (rep.DocId == block.DocId && block.Type != Models.BlockType.Open))).ToArray());
+            OpenBlocks = await Task.Run(() => levelDbContext.Blocks.Where(block => block.To == Authority && block.Type == BlockType.Open
+                  && !levelDbContext.Blocks.Any(rep => (rep.DocId == block.DocId && block.Type != BlockType.Open))).ToArray());
+            Employees = await Task.Run(() => userMgr.Users.Where(user => user.Dispatcher == User.Identity.Name).ToArray());
             return Page();
         }
     }

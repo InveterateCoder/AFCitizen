@@ -9,7 +9,7 @@
         </div>
         <div class="text-danger" asp-validation-summary="All"></div>
         <form asp-page="Compose" method="post">
-            <h3>Кому</h3>
+            <h3>Куда</h3>
             <hr />
             <div class="form-group">
                 <div class="input-group mb-3 input-group-sm">
@@ -24,7 +24,7 @@
             <div class="form-group">
                 <div class="input-group mb-3 input-group-sm">
                     <div class="input-group-prepend">
-                        <span style="width:200px" class="input-group-text">Куда:</span>
+                        <span style="width:200px" class="input-group-text">Кому:</span>
                     </div>
                     <select asp-for="AuthorityType" class="custom-select" asp-items="new SelectList(AFCitizen.Models.AuthorityType.Names())">
                         <option value="null" selected>Выберите из списка</option>

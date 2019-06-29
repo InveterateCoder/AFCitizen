@@ -30,7 +30,13 @@
                                 <p>@doc.Text</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-outline-success btn-block">Назначить</button>
+                                <button class="btn btn-outline-success btn-block" data-toggle="collapse" data-target="#list">Назначить</button>
+                                <div id="list" class="collapse list-group">
+                                    @foreach (var person in Model.Employees)
+                                    {
+                                        <a href="#" class="list-group-item list-group-item-action list-group-item-success">Имя: @person.UserName / Должнасть: @person.Position</a>
+                                    }
+                                </div>
                                 <button class="btn btn-outline-primary btn-block">Перенаправить</button>
                                 <button class="btn btn-outline-danger btn-block">Закрыть</button>
                             </div>

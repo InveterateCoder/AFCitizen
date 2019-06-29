@@ -1,0 +1,114 @@
+﻿@page
+@model AFCitizen.Pages.ActiveModel
+@{
+    Layout = "_Layout";
+}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>@Model.Header</h1>
+            <p>Активные Обращения</p>
+        </div>
+        @if (Model.OpenBlocks.Count() > 0)
+        {
+            List<AFCitizen.Models.Block> list = new List<AFCitizen.Models.Block>();
+            int i = 0;
+            <div id="accordion">
+                @foreach (var block in Model.OpenBlocks.Where(b => b.Type == AFCitizen.Models.BlockType.Open && !list.Any(bl => b.Id == bl.Id)).OrderByDescending(o => o.TimeStamp))
+                {
+                    i++;
+                    string closed = null;
+                    int lastType = int.MaxValue;
+                    AFCitizen.Models.Document doc = (AFCitizen.Models.Document)Newtonsoft.Json.JsonConvert.DeserializeObject(block.Document, typeof(AFCitizen.Models.Document));
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" data-toggle="collapse" href="@($"#collapse{i.ToString()}")">
+                                Кому: @block.To / Дата: @block.TimeStamp.ToString()
+                            </a>
+                        </div>
+                        <div id="@($"collapse{i.ToString()}")" class="collapse hide" data-parent="#accordion">
+                            <div class="card-body">
+                                <h3 class="text-center">@doc.Type</h3>
+                                <p>@doc.Text</p>
+                                @foreach (var exblock in Model.OpenBlocks.Where(b => b.DocId == block.DocId && b.Id != block.Id).OrderByDescending(o => o.TimeStamp))
+                                {
+                                    <hr />
+                                    <h4>От: @exblock.From / Кому: @exblock.To</h4>
+                                    @switch (exblock.Type)
+                                    {
+                                        case AFCitizen.Models.BlockType.Redirect:
+                                            lastType = (int)AFCitizen.Models.BlockType.Redirect;
+                                            <h4>Перенаправление</h4>
+                                            AFCitizen.Models.Redirect red = (AFCitizen.Models.Redirect)Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.TypeMessage, typeof(AFCitizen.Models.Redirect));
+                                            <p><strong>Кому:</strong> @red.To</p>
+                                            <p><strong>Комментарий:</strong> @red.Comment</p>
+                                            break;
+                                        case AFCitizen.Models.BlockType.Assign:
+                                            lastType = (int)AFCitizen.Models.BlockType.Assign;
+                                            AFCitizen.Models.Assign assign = (AFCitizen.Models.Assign)Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.TypeMessage, typeof(AFCitizen.Models.Assign));
+                                            <h4>Назначение</h4>
+                                            <p><strong>Ответственным назначен:</strong> @assign.AgentFullName</p>
+                                            <p><strong>Занимая должность:</strong> @assign.Position</p>
+                                            break;
+                                        case AFCitizen.Models.BlockType.Confirm:
+                                            lastType = (int)AFCitizen.Models.BlockType.Confirm;
+                                            <h4>Подтверждение</h4>
+                                            break;
+                                        case AFCitizen.Models.BlockType.Open:
+                                            lastType = (int)AFCitizen.Models.BlockType.Open;
+                                            <h4>Обжалование ответа</h4>
+                                            list.Add(exblock);
+                                            break;
+                                        case AFCitizen.Models.BlockType.Close:
+                                            lastType = (int)AFCitizen.Models.BlockType.Close;
+                                            if (exblock.From == User.Identity.Name)
+                                            {
+                                                closed = "Закрыт";
+                                            }
+                                            else
+                                            {
+                                                closed = "Ожидается подтверждение о закрытии";
+                                            }
+                                            <h4>@closed</h4>
+                                            break;
+                                    }
+                                }
+                            </div>
+                            <div class="card-footer">
+                                @switch (lastType)
+                                {
+                                    case (int)AFCitizen.Models.BlockType.Redirect:
+                                        <button class="btn btn-outline-primary btn-block">Отправить на новый адрес</button>
+                                        <button class="btn btn-outline-danger btn-block">Закрыть</button>
+                                        break;
+                                    case (int)AFCitizen.Models.BlockType.Assign:
+                                        <button class="btn btn-outline-primary btn-block">Подтвердить</button>
+                                        <button class="btn btn-outline-danger btn-block">Закрыть</button>
+                                        break;
+                                    case (int)AFCitizen.Models.BlockType.Confirm:
+                                        <p class="text-info">Ожидается ответ</p>
+                                        break;
+                                    case (int)AFCitizen.Models.BlockType.Open:
+                                        <p class="text-info">Ответ отправлен на обжалование, ожидается ответ</p>
+                                        break;
+                                    case (int)AFCitizen.Models.BlockType.Close:
+                                        if (closed == "Закрыт")
+                                        {
+                                            <p class="text-info">Закрыт</p>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-outline-primary btn-block">Обжаловать</button>
+                                            <button class="btn btn-outline-danger btn-block">Закрыть</button>
+                                        }
+                                        break;
+                                    default:
+                                        <p class="text-info">Ожидается ответ</p>
+                                        break;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
