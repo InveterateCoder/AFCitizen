@@ -13,7 +13,7 @@
             List<AFCitizen.Models.Block> list = new List<AFCitizen.Models.Block>();
             int i = 0;
             <div id="accordion">
-                @foreach (var block in Model.OpenBlocks.Where(b => b.Type == AFCitizen.Models.BlockType.Open && !list.Any(bl => b.Id == bl.Id)).OrderByDescending(o => o.TimeStamp))
+                @foreach (var block in Model.OpenBlocks.Where(b => b.Type == AFCitizen.Models.BlockType.Open && !list.Any(bl => b.Id == bl.Id)).OrderBy(o => o.TimeStamp))
                 {
                     i++;
                     string closed = null;
@@ -29,7 +29,7 @@
                             <div class="card-body">
                                 <h3 class="text-center">@doc.Type</h3>
                                 <p>@doc.Text</p>
-                                @foreach (var exblock in Model.OpenBlocks.Where(b => b.DocId == block.DocId && b.Id != block.Id).OrderByDescending(o => o.TimeStamp))
+                                @foreach (var exblock in Model.OpenBlocks.Where(b => b.DocId == block.DocId && b != block).OrderByDescending(o => o.TimeStamp))
                                 {
                                     <hr />
                                     <h4>От: @exblock.From / Кому: @exblock.To</h4>
@@ -60,7 +60,7 @@
                                             break;
                                         case AFCitizen.Models.BlockType.Close:
                                             lastType = (int)AFCitizen.Models.BlockType.Close;
-                                            if (exblock.From == User.Identity.Name)
+                                            if (exblock.isClosed)
                                             {
                                                 closed = "Закрыт";
                                             }
@@ -68,7 +68,14 @@
                                             {
                                                 closed = "Ожидается подтверждение о закрытии";
                                             }
-                                            <h4>@closed</h4>
+                                            AFCitizen.Models.Reply[] replies = (AFCitizen.Models.Reply[])Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.Replies, typeof(AFCitizen.Models.Reply[]));
+                                            var reply = replies.Where(rep => rep.From == exblock.From).FirstOrDefault();
+                                            <h4>Ответ</h4>
+                                            <p><strong>Кому:</strong> @reply.To</p>
+                                            <p><strong>Должностное Лицо:</strong> @reply.AgentFullName</p>
+                                            <p><strong>Должность:</strong> @reply.Position</p>
+                                            <p><strong>Ответ:</strong> @reply.Body</p>
+                                            <p><strong>Коментарий:</strong> @reply.Comment</p>
                                             break;
                                     }
                                 }

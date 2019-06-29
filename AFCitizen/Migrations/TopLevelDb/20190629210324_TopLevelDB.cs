@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AFCitizen.Migrations.MidLevelDb
+namespace AFCitizen.Migrations.TopLevelDb
 {
-    public partial class MidLevelDb : Migration
+    public partial class TopLevelDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,6 +11,9 @@ namespace AFCitizen.Migrations.MidLevelDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    DocId = table.Column<string>(nullable: true),
+                    TimeStamp = table.Column<string>(nullable: true),
+                    isClosed = table.Column<bool>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     AuthorityType = table.Column<string>(nullable: true),
                     From = table.Column<string>(nullable: true),

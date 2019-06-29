@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace AFCitizen.Migrations.MidLevelDb
+namespace AFCitizen.Migrations.FirstLevelDb
 {
-    [DbContext(typeof(MidLevelDbContext))]
-    [Migration("20190628182306_MidLevelDb")]
-    partial class MidLevelDb
+    [DbContext(typeof(FirstLevelDbContext))]
+    [Migration("20190629210253_FirstLevelDB")]
+    partial class FirstLevelDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,8 @@ namespace AFCitizen.Migrations.MidLevelDb
 
                     b.Property<string>("AuthorityType");
 
+                    b.Property<string>("DocId");
+
                     b.Property<string>("Document");
 
                     b.Property<string>("From");
@@ -37,11 +39,15 @@ namespace AFCitizen.Migrations.MidLevelDb
 
                     b.Property<string>("Replies");
 
+                    b.Property<string>("TimeStamp");
+
                     b.Property<string>("To");
 
                     b.Property<int>("Type");
 
                     b.Property<string>("TypeMessage");
+
+                    b.Property<bool>("isClosed");
 
                     b.HasKey("Id");
 

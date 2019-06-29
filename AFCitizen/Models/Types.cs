@@ -38,6 +38,7 @@ namespace AFCitizen.Models
 
     public class Reply
     {
+        public string To { get; set; }
         public string From { get; set; }
         public string AgentFullName { get; set; }
         public string Position { get; set; }

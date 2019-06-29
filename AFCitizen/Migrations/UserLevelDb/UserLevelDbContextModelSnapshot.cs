@@ -25,6 +25,8 @@ namespace AFCitizen.Migrations.UserLevelDb
 
                     b.Property<string>("AuthorityType");
 
+                    b.Property<string>("DocId");
+
                     b.Property<string>("Document");
 
                     b.Property<string>("From");
@@ -35,11 +37,15 @@ namespace AFCitizen.Migrations.UserLevelDb
 
                     b.Property<string>("Replies");
 
+                    b.Property<string>("TimeStamp");
+
                     b.Property<string>("To");
 
                     b.Property<int>("Type");
 
                     b.Property<string>("TypeMessage");
+
+                    b.Property<bool>("isClosed");
 
                     b.HasKey("Id");
 

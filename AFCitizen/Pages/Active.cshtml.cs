@@ -17,7 +17,8 @@ namespace AFCitizen.Pages
         public void OnGet([FromServices]UserLevelDbContext userDb)
         {
             Header = User.Identity.Name;
-            OpenBlocks = userDb.Blocks.Where(block => !userDb.Blocks.Any(b => b.DocId == block.DocId && b.From == User.Identity.Name && b.Type == BlockType.Close));
+            OpenBlocks = userDb.Blocks.Where(b => (b.From == User.Identity.Name || b.To == User.Identity.Name) && !userDb.Blocks.Any(ba => ba.DocId == b.DocId && ba.isClosed));
+            int i = OpenBlocks.Count();
         }
     }
 }

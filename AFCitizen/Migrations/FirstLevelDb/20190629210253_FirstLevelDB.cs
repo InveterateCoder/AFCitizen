@@ -2,7 +2,7 @@
 
 namespace AFCitizen.Migrations.FirstLevelDb
 {
-    public partial class FirstLevelDb : Migration
+    public partial class FirstLevelDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,6 +11,9 @@ namespace AFCitizen.Migrations.FirstLevelDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    DocId = table.Column<string>(nullable: true),
+                    TimeStamp = table.Column<string>(nullable: true),
+                    isClosed = table.Column<bool>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     AuthorityType = table.Column<string>(nullable: true),
                     From = table.Column<string>(nullable: true),

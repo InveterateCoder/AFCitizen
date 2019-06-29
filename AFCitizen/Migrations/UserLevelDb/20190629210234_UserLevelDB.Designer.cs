@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFCitizen.Migrations.UserLevelDb
 {
     [DbContext(typeof(UserLevelDbContext))]
-    [Migration("20190628182232_UserLevelDb")]
-    partial class UserLevelDb
+    [Migration("20190629210234_UserLevelDB")]
+    partial class UserLevelDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,8 @@ namespace AFCitizen.Migrations.UserLevelDb
 
                     b.Property<string>("AuthorityType");
 
+                    b.Property<string>("DocId");
+
                     b.Property<string>("Document");
 
                     b.Property<string>("From");
@@ -37,11 +39,15 @@ namespace AFCitizen.Migrations.UserLevelDb
 
                     b.Property<string>("Replies");
 
+                    b.Property<string>("TimeStamp");
+
                     b.Property<string>("To");
 
                     b.Property<int>("Type");
 
                     b.Property<string>("TypeMessage");
+
+                    b.Property<bool>("isClosed");
 
                     b.HasKey("Id");
 

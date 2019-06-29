@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFCitizen.Migrations.TopLevelDb
 {
     [DbContext(typeof(TopLevelDbContext))]
-    [Migration("20190628182321_TopLevelDb")]
-    partial class TopLevelDb
+    [Migration("20190629210324_TopLevelDB")]
+    partial class TopLevelDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,8 @@ namespace AFCitizen.Migrations.TopLevelDb
 
                     b.Property<string>("AuthorityType");
 
+                    b.Property<string>("DocId");
+
                     b.Property<string>("Document");
 
                     b.Property<string>("From");
@@ -37,11 +39,15 @@ namespace AFCitizen.Migrations.TopLevelDb
 
                     b.Property<string>("Replies");
 
+                    b.Property<string>("TimeStamp");
+
                     b.Property<string>("To");
 
                     b.Property<int>("Type");
 
                     b.Property<string>("TypeMessage");
+
+                    b.Property<bool>("isClosed");
 
                     b.HasKey("Id");
 

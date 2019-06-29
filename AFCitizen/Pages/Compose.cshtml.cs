@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -48,7 +49,8 @@ namespace AFCitizen.Pages
                     block.Type = Models.BlockType.Open;
                     block.Document = Newtonsoft.Json.JsonConvert.SerializeObject(Doc);
                     block.PreviousHash = "origin";
-                    block.Hash = Models.Block.ComputeHash(block);
+                    block.DocId = Guid.NewGuid().ToString();
+                    block.Lock();
                     await userDbContext.Blocks.AddAsync(block);
                     await userDbContext.SaveChangesAsync();
                     await levelDbContext.Blocks.AddAsync(block);
