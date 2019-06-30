@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace AFCitizen.Migrations.UserLevelDb
+namespace AFCitizen.Migrations.FirstLevelDb
 {
-    [DbContext(typeof(UserLevelDbContext))]
-    [Migration("20190629210234_UserLevelDB")]
-    partial class UserLevelDB
+    [DbContext(typeof(FirstLevelDbContext))]
+    [Migration("20190630025833_FirstLevelDB")]
+    partial class FirstLevelDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

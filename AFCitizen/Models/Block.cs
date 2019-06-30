@@ -29,7 +29,6 @@ namespace AFCitizen.Models
         }
         public void Lock()
         {
-            isClosed = false;
             TimeStamp = DateTime.Now.ToString();
             Hash = ComputeHash(this);
         }

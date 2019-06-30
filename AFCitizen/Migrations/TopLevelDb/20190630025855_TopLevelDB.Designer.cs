@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFCitizen.Migrations.TopLevelDb
 {
     [DbContext(typeof(TopLevelDbContext))]
-    [Migration("20190629210324_TopLevelDB")]
+    [Migration("20190630025855_TopLevelDB")]
     partial class TopLevelDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

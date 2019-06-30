@@ -64,14 +64,18 @@
                                             {
                                                 closed = "Ожидается подтверждение о закрытии";
                                             }
-                                            AFCitizen.Models.Reply[] replies = (AFCitizen.Models.Reply[])Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.Replies, typeof(AFCitizen.Models.Reply[]));
-                                            var reply = replies.Where(rep => rep.From == exblock.From).FirstOrDefault();
-                                            <h5 class="text-success">Ответ</h5>
-                                            <p><strong>Кому:</strong> @reply.To</p>
-                                            <p><strong>Должностное Лицо:</strong> @reply.AgentFullName</p>
-                                            <p><strong>Должность:</strong> @reply.Position</p>
-                                            <p><strong>Ответ:</strong> @reply.Body</p>
-                                            <p><strong>Коментарий:</strong> @reply.Comment</p>
+                                            if (!string.IsNullOrEmpty(exblock.Replies))
+                                            {
+                                                AFCitizen.Models.Reply[] replies;
+                                                replies = (AFCitizen.Models.Reply[])Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.Replies, typeof(AFCitizen.Models.Reply[]));
+                                                var reply = replies.Where(rep => rep.From == exblock.From).FirstOrDefault();
+                                                <h5 class="text-success">Ответ</h5>
+                                                <p><strong>Кому:</strong> @reply.To</p>
+                                                <p><strong>Должностное Лицо:</strong> @reply.AgentFullName</p>
+                                                <p><strong>Должность:</strong> @reply.Position</p>
+                                                <p><strong>Ответ:</strong> @reply.Body</p>
+                                                <p><strong>Коментарий:</strong> @reply.Comment</p>
+                                            }
                                             break;
                                     }
                                 }
@@ -80,8 +84,14 @@
                                 @switch (lastType)
                                 {
                                     case (int)AFCitizen.Models.BlockType.Redirect:
-                                        <button class="btn btn-outline-primary btn-block">Отправить на новый адрес</button>
-                                        <button class="btn btn-outline-danger btn-block">Закрыть</button>
+                                        <form asp-page-handler="RedirectBlock" method="post">
+                                            <input type="hidden" name="blockId" value="@block.Id" />
+                                            <button type="submit" class="btn btn-outline-primary btn-block">Отправить на новый адрес</button>
+                                        </form>
+                                        <form asp-page-handler="CloseBlock" method="post">
+                                            <input type="hidden" name="blockId" value="@block.Id" />
+                                            <button type="submit" class="btn btn-outline-danger btn-block">Закрыть</button>
+                                        </form>
                                         break;
                                     case (int)AFCitizen.Models.BlockType.Accept:
                                         <p class="text-info">Ожидается ответ</p>

@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace AFCitizen.Migrations.FirstLevelDb
+namespace AFCitizen.Migrations.MidLevelDb
 {
-    [DbContext(typeof(FirstLevelDbContext))]
-    [Migration("20190629210253_FirstLevelDB")]
-    partial class FirstLevelDB
+    [DbContext(typeof(MidLevelDbContext))]
+    [Migration("20190630025846_MidLevelDB")]
+    partial class MidLevelDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

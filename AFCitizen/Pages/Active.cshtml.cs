@@ -20,5 +20,26 @@ namespace AFCitizen.Pages
             OpenBlocks = userDb.Blocks.Where(b => (b.From == User.Identity.Name || b.To == User.Identity.Name) && !userDb.Blocks.Any(ba => ba.DocId == b.DocId && ba.isClosed));
             int i = OpenBlocks.Count();
         }
+        public async Task<IActionResult> OnPostCloseBlockAsync([FromServices]UserLevelDbContext userDbContex, string blockId)
+        {
+            Block block = await userDbContex.Blocks.FindAsync(blockId);
+            Block newBlock = new Block();
+            newBlock.DocId = block.DocId;
+            newBlock.isClosed = true;
+            newBlock.From = User.Identity.Name;
+            newBlock.To = User.Identity.Name;
+            newBlock.Type = BlockType.Close;
+            newBlock.PreviousHash = block.Hash;
+            newBlock.AuthorityType = block.AuthorityType;
+            newBlock.Document = block.Document;
+            newBlock.Lock();
+            await userDbContex.Blocks.AddAsync(newBlock);
+            await userDbContex.SaveChangesAsync();
+            return RedirectToPage("Active");
+        }
+        public async Task<IActionResult> OnPostRedirectBlockAsync([FromServices]UserLevelDbContext userDbContex, string blockId)
+        {
+            return RedirectToPage("Active");
+        }
     }
 }
