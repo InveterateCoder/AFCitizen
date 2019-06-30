@@ -108,5 +108,36 @@ namespace AFCitizen.Pages
             await userDbContext.SaveChangesAsync();
             return RedirectToPage("Dispatcher");
         }
+
+        public async Task<IActionResult> OnPostRedirectAsync(string city, string authorityType, string blockId, string comment)
+        {
+            ILevelDbContext levelDbContext = null;
+            if (User.IsInRole("ѕерв”ровень"))
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(FirstLevelDbContext)) as ILevelDbContext;
+            else if (User.IsInRole("—ред”ровень"))
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(MidLevelDbContext)) as ILevelDbContext;
+            else if (User.IsInRole("“оп”ровень"))
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(TopLevelDbContext)) as ILevelDbContext;
+            if (levelDbContext == null)
+                return RedirectToPage("Error");
+            Block block = await levelDbContext.Blocks.FindAsync(blockId);
+            Authority authority = Models.Authority.Cities[city][authorityType][0];
+            Block newBlock = new Block();
+            newBlock.From = User.Identity.Name;
+            newBlock.To = block.From;
+            newBlock.DocId = block.DocId;
+            newBlock.Document = block.Document;
+            newBlock.AuthorityType = block.AuthorityType;
+            newBlock.Type = BlockType.Redirect;
+            newBlock.TypeMessage = Newtonsoft.Json.JsonConvert.SerializeObject(new Redirect { AuthorityLevel = authority.Level, To = authority.Name, Comment = comment });
+            newBlock.PreviousHash = block.Hash;
+            newBlock.Lock();
+            levelDbContext.Blocks.Add(newBlock);
+            await ((DbContext)levelDbContext).SaveChangesAsync();
+            UserLevelDbContext userLevelDb = HttpContext.RequestServices.GetService(typeof(UserLevelDbContext)) as UserLevelDbContext;
+            userLevelDb.Blocks.Add(newBlock);
+            await userLevelDb.SaveChangesAsync();
+            return RedirectToPage("Dispatcher");
+        }
     }
 }

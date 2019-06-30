@@ -26,6 +26,7 @@ namespace AFCitizen.Models
     public class Redirect
     {
         public string To { get; set; }
+        public ushort AuthorityLevel { get; set; }
         public string Comment { get; set; }
     }
 

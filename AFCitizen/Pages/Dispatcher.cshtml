@@ -34,14 +34,49 @@
                                 <div id="list" class="collapse list-group">
                                     @foreach (var person in Model.Employees)
                                     {
-                                    <form asp-page-handler="Assign" method="post">
-                                        <input type="hidden" name="userName" value="@person.UserName" />
-                                        <input type="hidden" name="blockId" value="@block.Id" />
-                                        <button type="submit" class="list-group-item list-group-item-action list-group-item-success">Имя: @person.UserName / Должнасть: @person.Position</button>
-                                    </form>
+                                        <form asp-page-handler="Assign" method="post">
+                                            <input type="hidden" name="userName" value="@person.UserName" />
+                                            <input type="hidden" name="blockId" value="@block.Id" />
+                                            <button type="submit" class="list-group-item list-group-item-action list-group-item-success">Имя: @person.UserName / Должнасть: @person.Position</button>
+                                        </form>
                                     }
                                 </div>
-                                <button class="btn btn-outline-primary btn-block">Перенаправить</button>
+                                @if (string.IsNullOrEmpty(block.Replies))
+                                {
+                                    <button class="btn btn-outline-primary btn-block" data-toggle="collapse" data-target="#redir">Перенаправить</button>
+                                    <div id="redir" class="collapse">
+                                        <form asp-page-handler="Redirect" method="post">
+                                            <input type="hidden" name="blockId" value="@block.Id" />
+                                            <h3>Куда</h3>
+                                            <hr />
+                                            <div class="form-group">
+                                                <div class="input-group mb-3 input-group-sm">
+                                                    <div class="input-group-prepend">
+                                                        <span style="width:200px" class="input-group-text">Город:</span>
+                                                    </div>
+                                                    <select name="city" class="custom-select" asp-items="new SelectList(AFCitizen.Models.Authority.Cities.Keys)">
+                                                        <option value="null" selected>Выберите из списка</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group mb-3 input-group-sm">
+                                                    <div class="input-group-prepend">
+                                                        <span style="width:200px" class="input-group-text">Кому:</span>
+                                                    </div>
+                                                    <select name="authorityType" class="custom-select" asp-items="new SelectList(AFCitizen.Models.AuthorityType.Names())">
+                                                        <option value="null" selected>Выберите из списка</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea name="comment" style="resize:none; width:100%; height:250px" class="form-control"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-outline-primary btn-block">Подтвердить</button>
+                                        </form>
+                                    </div>
+                                }
+
                                 <button class="btn btn-outline-danger btn-block" data-toggle="collapse" data-target="#close">Закрыть</button>
                                 <div id="close" class="collapse">
                                     <form asp-page-handler="Close" method="post">
@@ -54,7 +89,7 @@
                                             <h5 class="text-center">Комментарий</h5>
                                             <textarea name="comment" class="form-control" style="resize:none; width:100%; height:200px"></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-outline-danger btn-block">Подтвердить закрытие</button>
+                                        <button type="submit" class="btn btn-outline-danger btn-block">Подтвердить</button>
                                     </form>
                                 </div>
                             </div>

@@ -37,7 +37,7 @@
                                     {
                                         case AFCitizen.Models.BlockType.Redirect:
                                             lastType = (int)AFCitizen.Models.BlockType.Redirect;
-                                            <h5 class="text-success">Перенаправление</h5>
+                                            <h5 class="text-success">Перенаправлено</h5>
                                             AFCitizen.Models.Redirect red = (AFCitizen.Models.Redirect)Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.TypeMessage, typeof(AFCitizen.Models.Redirect));
                                             <p><strong>Кому:</strong> @red.To</p>
                                             <p><strong>Комментарий:</strong> @red.Comment</p>
