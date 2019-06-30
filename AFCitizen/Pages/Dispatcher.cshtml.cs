@@ -22,15 +22,15 @@ namespace AFCitizen.Pages
             Authority = User.Identity.Name;
             ILevelDbContext levelDbContext = null;
             if (User.IsInRole("ѕерв”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(FirstLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(FirstLevelDbContext)) as ILevelDbContext;
             else if (User.IsInRole("—ред”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(MidLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(MidLevelDbContext)) as ILevelDbContext;
             else if (User.IsInRole("“оп”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(TopLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(TopLevelDbContext)) as ILevelDbContext;
             if (levelDbContext == null)
                 return RedirectToPage("Error");
             OpenBlocks = await Task.Run(() => levelDbContext.Blocks.Where(block => block.To == Authority && block.Type == BlockType.Open
-                  && !levelDbContext.Blocks.Any(rep => (rep.DocId == block.DocId && block.Type != BlockType.Open))).ToArray());
+                  && levelDbContext.Blocks.Where(bl => bl.DocId == block.DocId).Count() == 1).ToArray());
             Employees = await Task.Run(() => userMgr.Users.Where(user => user.Dispatcher == User.Identity.Name).ToArray());
             return Page();
         }
@@ -38,11 +38,11 @@ namespace AFCitizen.Pages
         {
             ILevelDbContext levelDbContext = null;
             if (User.IsInRole("ѕерв”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(FirstLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(FirstLevelDbContext)) as ILevelDbContext;
             else if (User.IsInRole("—ред”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(MidLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(MidLevelDbContext)) as ILevelDbContext;
             else if (User.IsInRole("“оп”ровень"))
-                levelDbContext = HttpContext.RequestServices.GetService(typeof(TopLevelDbContext)) as Models.ILevelDbContext;
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(TopLevelDbContext)) as ILevelDbContext;
             if (levelDbContext == null)
                 return RedirectToPage("Error");
             Block block = await levelDbContext.Blocks.FindAsync(blockId);
@@ -72,6 +72,38 @@ namespace AFCitizen.Pages
             UserLevelDbContext userDbContext = HttpContext.RequestServices.GetService(typeof(UserLevelDbContext)) as UserLevelDbContext;
             levelDbContext.Blocks.Add(newBlock);
             await ((DbContext)levelDbContext).SaveChangesAsync();
+            userDbContext.Blocks.Add(newBlock);
+            await userDbContext.SaveChangesAsync();
+            return RedirectToPage("Dispatcher");
+        }
+
+        public async Task<IActionResult> OnPostAssignAsync([FromServices]UserManager<CitizenUser> userMgr, string userName, string blockId)
+        {
+            ILevelDbContext levelDbContext = null;
+            if (User.IsInRole("ѕерв”ровень"))
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(FirstLevelDbContext)) as ILevelDbContext;
+            else if (User.IsInRole("—ред”ровень"))
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(MidLevelDbContext)) as ILevelDbContext;
+            else if (User.IsInRole("“оп”ровень"))
+                levelDbContext = HttpContext.RequestServices.GetService(typeof(TopLevelDbContext)) as ILevelDbContext;
+            if (levelDbContext == null)
+                return RedirectToPage("Error");
+            Block block = await levelDbContext.Blocks.FindAsync(blockId);
+            Block newBlock = new Block();
+            newBlock.From = block.From;
+            newBlock.To = userName;
+            newBlock.AuthorityType = block.AuthorityType;
+            newBlock.DocId = block.DocId;
+            newBlock.Document = block.Document;
+            newBlock.Replies = block.Replies;
+            newBlock.Type = BlockType.Accept;
+            var accept = new Accept { AgentFullName = userName, Position = userMgr.Users.Where(u => u.UserName == userName).Select(n => n.Position).FirstOrDefault() };
+            newBlock.TypeMessage = Newtonsoft.Json.JsonConvert.SerializeObject(accept);
+            newBlock.PreviousHash = block.Hash;
+            newBlock.Lock();
+            levelDbContext.Blocks.Add(newBlock);
+            await ((DbContext)levelDbContext).SaveChangesAsync();
+            UserLevelDbContext userDbContext = HttpContext.RequestServices.GetService(typeof(UserLevelDbContext)) as UserLevelDbContext;
             userDbContext.Blocks.Add(newBlock);
             await userDbContext.SaveChangesAsync();
             return RedirectToPage("Dispatcher");

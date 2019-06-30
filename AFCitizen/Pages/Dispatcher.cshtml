@@ -34,7 +34,11 @@
                                 <div id="list" class="collapse list-group">
                                     @foreach (var person in Model.Employees)
                                     {
-                                        <a href="#" class="list-group-item list-group-item-action list-group-item-success">Имя: @person.UserName / Должнасть: @person.Position</a>
+                                    <form asp-page-handler="Assign" method="post">
+                                        <input type="hidden" name="userName" value="@person.UserName" />
+                                        <input type="hidden" name="blockId" value="@block.Id" />
+                                        <button type="submit" class="list-group-item list-group-item-action list-group-item-success">Имя: @person.UserName / Должнасть: @person.Position</button>
+                                    </form>
                                     }
                                 </div>
                                 <button class="btn btn-outline-primary btn-block">Перенаправить</button>

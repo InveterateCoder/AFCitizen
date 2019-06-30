@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AFCitizen.Models
 {
-    public enum BlockType { Open, Close, Redirect, Assign, Confirm }
+    public enum BlockType { Open, Close, Redirect, Accept }
     public class Block
     {
         public string Id { get; set; }

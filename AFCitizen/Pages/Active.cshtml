@@ -32,30 +32,26 @@
                                 @foreach (var exblock in Model.OpenBlocks.Where(b => b.DocId == block.DocId && b != block).OrderByDescending(o => o.TimeStamp))
                                 {
                                     <hr />
-                                    <h4>От: @exblock.From / Кому: @exblock.To</h4>
+                                    <h5>От: @exblock.From / Кому: @exblock.To</h5>
                                     @switch (exblock.Type)
                                     {
                                         case AFCitizen.Models.BlockType.Redirect:
                                             lastType = (int)AFCitizen.Models.BlockType.Redirect;
-                                            <h4>Перенаправление</h4>
+                                            <h5 class="text-success">Перенаправление</h5>
                                             AFCitizen.Models.Redirect red = (AFCitizen.Models.Redirect)Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.TypeMessage, typeof(AFCitizen.Models.Redirect));
                                             <p><strong>Кому:</strong> @red.To</p>
                                             <p><strong>Комментарий:</strong> @red.Comment</p>
                                             break;
-                                        case AFCitizen.Models.BlockType.Assign:
-                                            lastType = (int)AFCitizen.Models.BlockType.Assign;
-                                            AFCitizen.Models.Assign assign = (AFCitizen.Models.Assign)Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.TypeMessage, typeof(AFCitizen.Models.Assign));
-                                            <h4>Назначение</h4>
-                                            <p><strong>Ответственным назначен:</strong> @assign.AgentFullName</p>
-                                            <p><strong>Занимая должность:</strong> @assign.Position</p>
-                                            break;
-                                        case AFCitizen.Models.BlockType.Confirm:
-                                            lastType = (int)AFCitizen.Models.BlockType.Confirm;
-                                            <h4>Подтверждение</h4>
+                                        case AFCitizen.Models.BlockType.Accept:
+                                            lastType = (int)AFCitizen.Models.BlockType.Accept;
+                                            AFCitizen.Models.Accept assign = (AFCitizen.Models.Accept)Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.TypeMessage, typeof(AFCitizen.Models.Accept));
+                                            <h5 class="text-success">Принято на рссмотрение</h5>
+                                            <p><strong>Должностное лицо:</strong> @assign.AgentFullName</p>
+                                            <p><strong>Должность:</strong> @assign.Position</p>
                                             break;
                                         case AFCitizen.Models.BlockType.Open:
                                             lastType = (int)AFCitizen.Models.BlockType.Open;
-                                            <h4>Обжалование ответа</h4>
+                                            <h5 class="text-success">Обжалование ответа</h5>
                                             list.Add(exblock);
                                             break;
                                         case AFCitizen.Models.BlockType.Close:
@@ -70,7 +66,7 @@
                                             }
                                             AFCitizen.Models.Reply[] replies = (AFCitizen.Models.Reply[])Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.Replies, typeof(AFCitizen.Models.Reply[]));
                                             var reply = replies.Where(rep => rep.From == exblock.From).FirstOrDefault();
-                                            <h4>Ответ</h4>
+                                            <h5 class="text-success">Ответ</h5>
                                             <p><strong>Кому:</strong> @reply.To</p>
                                             <p><strong>Должностное Лицо:</strong> @reply.AgentFullName</p>
                                             <p><strong>Должность:</strong> @reply.Position</p>
@@ -87,11 +83,7 @@
                                         <button class="btn btn-outline-primary btn-block">Отправить на новый адрес</button>
                                         <button class="btn btn-outline-danger btn-block">Закрыть</button>
                                         break;
-                                    case (int)AFCitizen.Models.BlockType.Assign:
-                                        <button class="btn btn-outline-primary btn-block">Подтвердить</button>
-                                        <button class="btn btn-outline-danger btn-block">Закрыть</button>
-                                        break;
-                                    case (int)AFCitizen.Models.BlockType.Confirm:
+                                    case (int)AFCitizen.Models.BlockType.Accept:
                                         <p class="text-info">Ожидается ответ</p>
                                         break;
                                     case (int)AFCitizen.Models.BlockType.Open:

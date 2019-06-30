@@ -29,7 +29,7 @@ namespace AFCitizen.Models
         public string Comment { get; set; }
     }
 
-    public class Assign
+    public class Accept
     {
         public string To { get; set; }
         public string AgentFullName { get; set; }
