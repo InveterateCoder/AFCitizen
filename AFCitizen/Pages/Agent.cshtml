@@ -9,20 +9,46 @@
             <p>Честно и усердно исполняйте свой долг перед народом! Трудитесь во благо нашей с вами страны!</p>
         </div>
         <div id="accordion">
-            <div class="card">
-                <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                        От: Артур Григорян / Дата: 02/22/3021
-                    </a>
-                </div>
-                <div id="collapseOne" class="collapse hide" data-parent="#accordion">
-                    <div class="card-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            @if (Model.OpenBlocks.Count() > 0)
+            {
+                int i = 0;
+                @foreach (var block in Model.OpenBlocks)
+                {
+                    i++;
+                    AFCitizen.Models.Document doc = (AFCitizen.Models.Document)Newtonsoft.Json.JsonConvert.DeserializeObject(block.Document, typeof(AFCitizen.Models.Document));
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" data-toggle="collapse" href="@($"#collapse{i}")">
+                                От: @doc.From / Дата: @block.TimeStamp.ToString()
+                                <br>
+                                Адрес: @doc.Address
+                            </a>
+                        </div>
+                        <div id="@($"collapse{i}")" class="collapse hide" data-parent="#accordion">
+                            <div class="card-body">
+                                <h3 class="text-center">@doc.Type</h3>
+                                <p>@doc.Text</p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-outline-danger btn-block" data-toggle="collapse" data-target="#close">Закрыть</button>
+                                <div class="collapse" id="close">
+                                    <form asp-page="Agent" method="post">
+                                        <input type="hidden" name="blockId" value="@block.Id" />
+                                        <div class="form-group">
+                                            <h4>Ответ</h4>
+                                            <textarea name="reply" style="resize:none; width:100%; height:350px"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <h4>Коментарий</h4>
+                                            <textarea name="comment" style="resize:none; width:100%; height:350px"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-outline-danger btn-block">Подтвердить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <button class="btn btn-outline-danger btn-block">Закрыть</button>
-                    </div>
-                </div>
-            </div>
+                }
+            }
         </div>
     </div>
