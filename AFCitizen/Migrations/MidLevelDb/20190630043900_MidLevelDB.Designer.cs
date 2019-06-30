@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFCitizen.Migrations.MidLevelDb
 {
     [DbContext(typeof(MidLevelDbContext))]
-    [Migration("20190630025846_MidLevelDB")]
+    [Migration("20190630043900_MidLevelDB")]
     partial class MidLevelDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,8 @@ namespace AFCitizen.Migrations.MidLevelDb
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("AuthorityType");
+
+                    b.Property<string>("City");
 
                     b.Property<string>("DocId");
 

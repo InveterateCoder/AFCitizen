@@ -20,6 +20,7 @@
                     int lastType = int.MaxValue;
                     AFCitizen.Models.Redirect red = null;
                     AFCitizen.Models.Document doc = (AFCitizen.Models.Document)Newtonsoft.Json.JsonConvert.DeserializeObject(block.Document, typeof(AFCitizen.Models.Document));
+                    AFCitizen.Models.Block _exblock = null;
                     <div class="card">
                         <div class="card-header">
                             <a class="card-link" data-toggle="collapse" href="@($"#collapse{i.ToString()}")">
@@ -32,8 +33,9 @@
                                 <p>@doc.Text</p>
                                 @foreach (var exblock in Model.OpenBlocks.Where(b => b.DocId == block.DocId && b != block).OrderByDescending(o => o.TimeStamp))
                                 {
+                                    _exblock = exblock;
                                     <hr />
-                                    <h5>От: @exblock.From / Кому: @exblock.To</h5>
+                                    <h5>Ответ от: @exblock.From / Кому: @exblock.To</h5>
                                     @switch (exblock.Type)
                                     {
                                         case AFCitizen.Models.BlockType.Redirect:
@@ -69,13 +71,16 @@
                                             {
                                                 AFCitizen.Models.Reply[] replies;
                                                 replies = (AFCitizen.Models.Reply[])Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.Replies, typeof(AFCitizen.Models.Reply[]));
-                                                var reply = replies.Where(rep => rep.From == exblock.From).FirstOrDefault();
-                                                <h5 class="text-success">Ответ</h5>
-                                                <p><strong>Кому:</strong> @reply.To</p>
-                                                <p><strong>Должностное Лицо:</strong> @reply.AgentFullName</p>
-                                                <p><strong>Должность:</strong> @reply.Position</p>
-                                                <p><strong>Ответ:</strong> @reply.Body</p>
-                                                <p><strong>Коментарий:</strong> @reply.Comment</p>
+                                                @foreach (var reply in replies)
+                                                {
+                                                    <h5 class="text-success">Ответ</h5>
+                                                    <p><strong>От:</strong> @reply.From</p>
+                                                    <p><strong>Кому:</strong> @reply.To</p>
+                                                    <p><strong>Должностное Лицо:</strong> @reply.AgentFullName</p>
+                                                    <p><strong>Должность:</strong> @reply.Position</p>
+                                                    <p><strong>Ответ:</strong> @reply.Body</p>
+                                                    <p><strong>Коментарий:</strong> @reply.Comment</p>
+                                                }
                                             }
                                             break;
                                     }
@@ -89,11 +94,11 @@
                                             <input type="hidden" name="authorityLevel" value="@red.AuthorityLevel" />
                                             <input type="hidden" name="to" value="@red.To" />
                                             <input type="hidden" name="authorityType" value="@red.AuthorityType" />
-                                            <input type="hidden" name="blockId" value="@block.Id" />
+                                            <input type="hidden" name="blockId" value="@_exblock.Id" />
                                             <button type="submit" class="btn btn-outline-primary btn-block">Отправить на новый адрес</button>
                                         </form>
                                         <form asp-page-handler="CloseBlock" method="post">
-                                            <input type="hidden" name="blockId" value="@block.Id" />
+                                            <input type="hidden" name="blockId" value="@_exblock.Id" />
                                             <button type="submit" class="btn btn-outline-danger btn-block">Закрыть</button>
                                         </form>
                                         break;
@@ -110,8 +115,14 @@
                                         }
                                         else
                                         {
-                                            <button class="btn btn-outline-primary btn-block">Обжаловать</button>
-                                            <button class="btn btn-outline-danger btn-block">Закрыть</button>
+                                            <form asp-page-handler="Appeal" method="post">
+                                                <input type="hidden" name="blockId" value="@_exblock.Id" />
+                                                <button type="submit" class="btn btn-outline-primary btn-block">Обжаловать</button>
+                                            </form>
+                                            <form asp-page-handler="CloseBlock" method="post">
+                                                <input type="hidden" name="blockId" value="@_exblock.Id" />
+                                                <button type="submit" class="btn btn-outline-danger btn-block">Закрыть</button>
+                                            </form>
                                         }
                                         break;
                                     default:

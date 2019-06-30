@@ -51,6 +51,7 @@ namespace AFCitizen.Pages
             newBlock.To = block.From;
             newBlock.DocId = block.DocId;
             newBlock.Document = block.Document;
+            newBlock.City = block.City;
             newBlock.AuthorityType = block.AuthorityType;
             Document doc = (Document)Newtonsoft.Json.JsonConvert.DeserializeObject(block.Document, typeof(Document));
             Reply[] replies;
@@ -95,6 +96,7 @@ namespace AFCitizen.Pages
             newBlock.AuthorityType = block.AuthorityType;
             newBlock.DocId = block.DocId;
             newBlock.Document = block.Document;
+            newBlock.City = block.City;
             newBlock.Replies = block.Replies;
             newBlock.Type = BlockType.Accept;
             var accept = new Accept { AgentFullName = userName, Position = userMgr.Users.Where(u => u.UserName == userName).Select(n => n.Position).FirstOrDefault() };
@@ -126,6 +128,7 @@ namespace AFCitizen.Pages
             newBlock.From = User.Identity.Name;
             newBlock.To = block.From;
             newBlock.DocId = block.DocId;
+            newBlock.City = block.City;
             newBlock.Document = block.Document;
             newBlock.AuthorityType = block.AuthorityType;
             newBlock.Type = BlockType.Redirect;

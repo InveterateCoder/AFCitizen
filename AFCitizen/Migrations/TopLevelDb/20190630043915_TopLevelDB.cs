@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AFCitizen.Migrations.MidLevelDb
+namespace AFCitizen.Migrations.TopLevelDb
 {
-    public partial class MidLevelDB : Migration
+    public partial class TopLevelDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,6 +16,7 @@ namespace AFCitizen.Migrations.MidLevelDb
                     isClosed = table.Column<bool>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     AuthorityType = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
                     From = table.Column<string>(nullable: true),
                     To = table.Column<string>(nullable: true),
                     Document = table.Column<string>(nullable: true),

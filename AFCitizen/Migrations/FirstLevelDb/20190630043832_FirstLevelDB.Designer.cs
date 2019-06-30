@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFCitizen.Migrations.FirstLevelDb
 {
     [DbContext(typeof(FirstLevelDbContext))]
-    [Migration("20190630025833_FirstLevelDB")]
+    [Migration("20190630043832_FirstLevelDB")]
     partial class FirstLevelDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,8 @@ namespace AFCitizen.Migrations.FirstLevelDb
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("AuthorityType");
+
+                    b.Property<string>("City");
 
                     b.Property<string>("DocId");
 

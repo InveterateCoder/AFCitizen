@@ -13,6 +13,7 @@ namespace AFCitizen.Models
         public bool isClosed { get; set; }
         public BlockType Type { get; set; }
         public string AuthorityType { get; set; }
+        public string City { get; set; }
         public string From { get; set; }
         public string To { get; set; }
         public string Document { get; set; } // JSON for Document

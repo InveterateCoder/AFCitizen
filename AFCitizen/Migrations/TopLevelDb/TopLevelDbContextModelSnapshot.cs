@@ -25,6 +25,8 @@ namespace AFCitizen.Migrations.TopLevelDb
 
                     b.Property<string>("AuthorityType");
 
+                    b.Property<string>("City");
+
                     b.Property<string>("DocId");
 
                     b.Property<string>("Document");

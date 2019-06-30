@@ -17,9 +17,6 @@ namespace AFCitizen.Pages
         public string City { get; set; }
         [Required, BindProperty]
         public string AuthorityType { get; set; }
-        public void OnGet()
-        {
-        }
         public async Task<IActionResult> OnPostAsync([FromServices]Models.UserLevelDbContext userDbContext)
         {
             if (ModelState.IsValid)
@@ -44,6 +41,7 @@ namespace AFCitizen.Pages
                 {
                     Models.Block block = new Models.Block();
                     block.From = User.Identity.Name;
+                    block.City = City;
                     block.AuthorityType = AuthorityType;
                     block.To = authority.Name;
                     block.Type = Models.BlockType.Open;
