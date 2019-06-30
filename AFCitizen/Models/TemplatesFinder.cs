@@ -8,11 +8,11 @@ namespace AFCitizen.Models
 {
     public static class TemplatesFinder
     {
-        public static int[] FindTemplates(string original, Dictionary<int, string> templates)
+        public static string[] FindTemplates(string original, Dictionary<string, string> templates)
         {
             string[] words = original.Split(" ");
             List<Item> resultList = new List<Item>();
-            int[] result = new int[templates.Count];
+            string[] result = new string[templates.Count];
             foreach (var template in templates)
             {
                 double similarity = 0;
@@ -36,7 +36,7 @@ namespace AFCitizen.Models
         struct Item
         {
             public double similarity;
-            public int id;
+            public string id;
         }
     }
 }

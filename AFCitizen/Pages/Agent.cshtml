@@ -36,7 +36,7 @@
                                         <input type="hidden" name="blockId" value="@block.Id" />
                                         <div class="form-group">
                                             <h4>Ответ</h4>
-                                            <textarea name="reply" style="resize:none; width:100%; height:350px"></textarea>
+                                            <textarea name="reply" style="resize:none; width:100%; height:350px">@if (Model.TemplateList.Count > 0){@Model.TemplateList[i - 1];}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <h4>Коментарий</h4>

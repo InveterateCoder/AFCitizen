@@ -15,10 +15,9 @@ namespace AFCitizen.Pages
     public class AgentModel : PageModel
     {
         public string Header { get; set; }
-        public IEnumerable<Block> OpenBlocks { get; set; }
-        public IEnumerable<string> Template { get; set; }
-        public List<string> TemplateList { get; set; }
-        public async Task<IActionResult> OnGet()
+        public List<Block> OpenBlocks { get; set; } = new List<Block>();
+        public List<string> TemplateList { get; set; } = new List<string>();
+        public void OnGet()
         {
             Header = User.Identity.Name;
             ILevelDbContext levelDbContext = null;
@@ -28,21 +27,28 @@ namespace AFCitizen.Pages
                 levelDbContext = HttpContext.RequestServices.GetService(typeof(MidLevelDbContext)) as ILevelDbContext;
             else if (User.IsInRole("ТопУровень"))
                 levelDbContext = HttpContext.RequestServices.GetService(typeof(TopLevelDbContext)) as ILevelDbContext;
-            if (levelDbContext == null)
-                return RedirectToPage("Error");
-            OpenBlocks = levelDbContext.Blocks.Where(block => block.To == User.Identity.Name && block.Type == BlockType.Accept && !levelDbContext.Blocks.Any(ab => ab.DocId == block.DocId && ab.Type == BlockType.Close));
-            string authType = OpenBlocks.Select(s => s.AuthorityType).FirstOrDefault(); //continue
+            OpenBlocks = levelDbContext.Blocks.Where(block => block.To == User.Identity.Name && block.Type == BlockType.Accept && !levelDbContext.Blocks.Any(ab => ab.DocId == block.DocId && ab.Type == BlockType.Close)).ToList();
+            string authType = OpenBlocks.Select(s => s.AuthorityType).FirstOrDefault();
             if (authType != null)
             {
                 var _list = levelDbContext.Blocks.Where(block => block.Type == BlockType.Close && block.AuthorityType == authType).AsEnumerable();
-                Dictionary<int, string> dict = null;
-                foreach (var item in _list)
+                if (_list != null)
                 {
-                    dict.Add(int.Parse(item.Id), ((Document)Newtonsoft.Json.JsonConvert.DeserializeObject(item.Document, typeof(Document))).Text);
-
+                    Dictionary<string, string> dict = new Dictionary<string, string>();
+                    foreach (var item in _list)
+                    {
+                        var text = ((Document)Newtonsoft.Json.JsonConvert.DeserializeObject(item.Document, typeof(Document))).Text;
+                        dict.Add(item.Id, text);
+                    }
+                    if (dict.Count() > 0)
+                        for (int i = 0; i < OpenBlocks.Count(); i++)
+                        {
+                            var result = TemplatesFinder.FindTemplates(((Document)Newtonsoft.Json.JsonConvert.DeserializeObject(OpenBlocks[i].Document, typeof(Document))).Text, dict);
+                            Reply[] repl = ((Reply[])Newtonsoft.Json.JsonConvert.DeserializeObject(_list.Where(t => t.Id == result[0]).FirstOrDefault().Replies, typeof(Reply[])));
+                            TemplateList.Add(repl[0].Body);
+                        }
                 }
             }
-            return Page();
         }
         public async Task<IActionResult> OnPostAsync([FromServices] UserLevelDbContext userDbContext, [FromServices] UserManager<CitizenUser> userMgr, string blockId, string reply, string comment)
         {
