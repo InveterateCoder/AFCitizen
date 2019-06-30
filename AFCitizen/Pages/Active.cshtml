@@ -31,7 +31,7 @@
                             <div class="card-body">
                                 <h3 class="text-center">@doc.Type</h3>
                                 <p>@doc.Text</p>
-                                @foreach (var exblock in Model.OpenBlocks.Where(b => b.DocId == block.DocId && b != block).OrderByDescending(o => o.TimeStamp))
+                                @foreach (var exblock in Model.OpenBlocks.Where(b => b.DocId == block.DocId && b != block).OrderBy(o => o.TimeStamp))
                                 {
                                     _exblock = exblock;
                                     <hr />

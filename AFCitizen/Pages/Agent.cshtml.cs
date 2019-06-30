@@ -16,7 +16,9 @@ namespace AFCitizen.Pages
     {
         public string Header { get; set; }
         public IEnumerable<Block> OpenBlocks { get; set; }
-        public IActionResult OnGet()
+        public IEnumerable<string> Template { get; set; }
+        public List<string> TemplateList { get; set; }
+        public async Task<IActionResult> OnGet()
         {
             Header = User.Identity.Name;
             ILevelDbContext levelDbContext = null;
@@ -29,6 +31,17 @@ namespace AFCitizen.Pages
             if (levelDbContext == null)
                 return RedirectToPage("Error");
             OpenBlocks = levelDbContext.Blocks.Where(block => block.To == User.Identity.Name && block.Type == BlockType.Accept && !levelDbContext.Blocks.Any(ab => ab.DocId == block.DocId && ab.Type == BlockType.Close));
+            string authType = OpenBlocks.Select(s => s.AuthorityType).FirstOrDefault(); //continue
+            if (authType != null)
+            {
+                var _list = levelDbContext.Blocks.Where(block => block.Type == BlockType.Close && block.AuthorityType == authType).AsEnumerable();
+                Dictionary<int, string> dict = null;
+                foreach (var item in _list)
+                {
+                    dict.Add(int.Parse(item.Id), ((Document)Newtonsoft.Json.JsonConvert.DeserializeObject(item.Document, typeof(Document))).Text);
+
+                }
+            }
             return Page();
         }
         public async Task<IActionResult> OnPostAsync([FromServices] UserLevelDbContext userDbContext, [FromServices] UserManager<CitizenUser> userMgr, string blockId, string reply, string comment)
