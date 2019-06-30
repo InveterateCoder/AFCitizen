@@ -129,7 +129,7 @@ namespace AFCitizen.Pages
             newBlock.Document = block.Document;
             newBlock.AuthorityType = block.AuthorityType;
             newBlock.Type = BlockType.Redirect;
-            newBlock.TypeMessage = Newtonsoft.Json.JsonConvert.SerializeObject(new Redirect { AuthorityLevel = authority.Level, To = authority.Name, Comment = comment });
+            newBlock.TypeMessage = Newtonsoft.Json.JsonConvert.SerializeObject(new Redirect { AuthorityLevel = authority.Level, AuthorityType = authorityType, To = authority.Name, Comment = comment });
             newBlock.PreviousHash = block.Hash;
             newBlock.Lock();
             levelDbContext.Blocks.Add(newBlock);

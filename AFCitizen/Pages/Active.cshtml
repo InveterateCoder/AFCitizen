@@ -18,6 +18,7 @@
                     i++;
                     string closed = null;
                     int lastType = int.MaxValue;
+                    AFCitizen.Models.Redirect red = null;
                     AFCitizen.Models.Document doc = (AFCitizen.Models.Document)Newtonsoft.Json.JsonConvert.DeserializeObject(block.Document, typeof(AFCitizen.Models.Document));
                     <div class="card">
                         <div class="card-header">
@@ -37,8 +38,8 @@
                                     {
                                         case AFCitizen.Models.BlockType.Redirect:
                                             lastType = (int)AFCitizen.Models.BlockType.Redirect;
-                                            <h5 class="text-success">Перенаправлено</h5>
-                                            AFCitizen.Models.Redirect red = (AFCitizen.Models.Redirect)Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.TypeMessage, typeof(AFCitizen.Models.Redirect));
+                                            <h5 class="text-success">Перенаправить</h5>
+                                            red = (AFCitizen.Models.Redirect)Newtonsoft.Json.JsonConvert.DeserializeObject(exblock.TypeMessage, typeof(AFCitizen.Models.Redirect));
                                             <p><strong>Кому:</strong> @red.To</p>
                                             <p><strong>Комментарий:</strong> @red.Comment</p>
                                             break;
@@ -85,6 +86,9 @@
                                 {
                                     case (int)AFCitizen.Models.BlockType.Redirect:
                                         <form asp-page-handler="RedirectBlock" method="post">
+                                            <input type="hidden" name="authorityLevel" value="@red.AuthorityLevel" />
+                                            <input type="hidden" name="to" value="@red.To" />
+                                            <input type="hidden" name="authorityType" value="@red.AuthorityType" />
                                             <input type="hidden" name="blockId" value="@block.Id" />
                                             <button type="submit" class="btn btn-outline-primary btn-block">Отправить на новый адрес</button>
                                         </form>
